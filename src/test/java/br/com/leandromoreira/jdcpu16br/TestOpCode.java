@@ -8,11 +8,17 @@ import org.junit.Test;
 
 public class TestOpCode {
 
+    public static final int WORD = 0x7C01;
     private OpCode opCode;
 
     @Before
     public void setup() {
-        opCode = new OpCode(0x7C01);
+        opCode = new OpCode(WORD);
+    }
+
+    @Test
+    public void returns_instruction() {
+        assertThat(opCode.instruction(), is(WORD));
     }
 
     @Test
