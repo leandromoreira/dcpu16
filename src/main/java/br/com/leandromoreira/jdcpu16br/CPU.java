@@ -31,13 +31,13 @@ public class CPU {
             private int cycles = 2;
 
             public void execute(final OpCode opcode) {
-                final int subopcode = (opcode.instruction() >> 0x4) & 0x6;
+                final int syscall = (opcode.instruction() >> 0x4) & 0x6;
                 final int a = (opcode.instruction() >> (0x4 + 0x6));
-                switch (subopcode) {
+                switch (syscall) {
                     case SYSCALL_JSR:
-                        stackPointer = programCounter + 1;
-                        programCounter = a;
-                        defaultSumToNextInstruction = 0;
+                        stackPointer = programCounter + ONE;
+                        programCounter = register[a];
+                        defaultSumToNextInstruction = ZERO;
                         break;
                 }
             }
