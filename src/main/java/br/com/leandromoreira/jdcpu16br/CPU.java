@@ -30,9 +30,9 @@ public class CPU {
 
             private int cycles = 2;
 
-            public void execute(final OpCode opcode) {
-                final int syscall = (opcode.instruction() >> 0x4) & 0x6;
-                final int a = (opcode.instruction() >> (0x4 + 0x6));
+            public void execute(final OpCode parameter) {
+                final int syscall = (parameter.instruction() >> 0x4) & 0x6;
+                final int a = (parameter.instruction() >> (0x4 + 0x6));
                 switch (syscall) {
                     case SYSCALL_JSR:
                         stackPointer = programCounter + ONE;
@@ -49,15 +49,15 @@ public class CPU {
         };
         instruction[SET] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] = register[opcode.b()];
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] = register[parameter.b()];
             }
         };
         instruction[ADD] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] += register[opcode.b()];
-                overflow = ((register[opcode.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] += register[parameter.b()];
+                overflow = ((register[parameter.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
             }
 
             @Override
@@ -67,9 +67,9 @@ public class CPU {
         };
         instruction[SUB] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] -= register[opcode.b()];
-                overflow = (register[opcode.a()] < ZERO) ? OxFFFF : ZERO;
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] -= register[parameter.b()];
+                overflow = (register[parameter.a()] < ZERO) ? OxFFFF : ZERO;
             }
 
             @Override
@@ -79,9 +79,9 @@ public class CPU {
         };
         instruction[MUL] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] *= register[opcode.b()];
-                overflow = ((register[opcode.a()] * register[opcode.b()]) >> WORD_SIZE) & OxFFFF;
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] *= register[parameter.b()];
+                overflow = ((register[parameter.a()] * register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
             }
 
             @Override
@@ -91,10 +91,10 @@ public class CPU {
         };
         instruction[DIV] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                if (register[opcode.b()] != ZERO) {
-                    register[opcode.a()] /= register[opcode.b()];
-                    overflow = ((register[opcode.a()] << WORD_SIZE) / register[opcode.b()]) & OxFFFF;
+            public void execute(final OpCode parameter) {
+                if (register[parameter.b()] != ZERO) {
+                    register[parameter.a()] /= register[parameter.b()];
+                    overflow = ((register[parameter.a()] << WORD_SIZE) / register[parameter.b()]) & OxFFFF;
                 } else {
                     overflow = ZERO;
                 }
@@ -107,8 +107,8 @@ public class CPU {
         };
         instruction[MOD] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] = (register[opcode.b()] == ZERO) ? ZERO : register[opcode.a()] % register[opcode.b()];
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] = (register[parameter.b()] == ZERO) ? ZERO : register[parameter.a()] % register[parameter.b()];
             }
 
             @Override
@@ -118,9 +118,9 @@ public class CPU {
         };
         instruction[SHL] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] <<= register[opcode.b()];
-                overflow = ((register[opcode.a()] << register[opcode.b()]) >> WORD_SIZE) & OxFFFF;
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] <<= register[parameter.b()];
+                overflow = ((register[parameter.a()] << register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
             }
 
             @Override
@@ -130,9 +130,9 @@ public class CPU {
         };
         instruction[SHR] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] >>= register[opcode.b()];
-                overflow = ((register[opcode.a()] << WORD_SIZE) >> register[opcode.b()]) & OxFFFF;
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] >>= register[parameter.b()];
+                overflow = ((register[parameter.a()] << WORD_SIZE) >> register[parameter.b()]) & OxFFFF;
             }
 
             @Override
@@ -142,26 +142,26 @@ public class CPU {
         };
         instruction[AND] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] &= register[opcode.b()];
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] &= register[parameter.b()];
             }
         };
         instruction[BOR] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] |= register[opcode.b()];
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] |= register[parameter.b()];
             }
         };
         instruction[XOR] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                register[opcode.a()] ^= register[opcode.b()];
+            public void execute(final OpCode parameter) {
+                register[parameter.a()] ^= register[parameter.b()];
             }
         };
         instruction[IFE] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                if (register[opcode.a()] != register[opcode.b()]) {
+            public void execute(final OpCode parameter) {
+                if (register[parameter.a()] != register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
                 }
@@ -174,8 +174,8 @@ public class CPU {
         };
         instruction[IFN] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                if (register[opcode.a()] == register[opcode.b()]) {
+            public void execute(final OpCode parameter) {
+                if (register[parameter.a()] == register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
                 }
@@ -188,8 +188,8 @@ public class CPU {
         };
         instruction[IFG] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                if (register[opcode.a()] < register[opcode.b()]) {
+            public void execute(final OpCode parameter) {
+                if (register[parameter.a()] < register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
                 }
@@ -202,8 +202,8 @@ public class CPU {
         };
         instruction[IFB] = new DefaultInstruction() {
 
-            public void execute(final OpCode opcode) {
-                if (register[opcode.a()] > register[opcode.b()]) {
+            public void execute(final OpCode parameter) {
+                if (register[parameter.a()] > register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
                 }
