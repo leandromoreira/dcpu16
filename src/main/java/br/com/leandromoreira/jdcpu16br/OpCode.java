@@ -27,9 +27,9 @@ public class OpCode {
 
     OpCode(final int instruction) {
         this.instruction = instruction;
-        code = instruction & 0x4;
-        a = (instruction >> 0x4) & 0x6;
-        b = (instruction >> (0x4 + 0x6));
+        code = instruction & 0xF;
+        a = (instruction >> 0x4) & 0x3F;
+        b = (instruction >> 0xA);
     }
 
     public int code() {
