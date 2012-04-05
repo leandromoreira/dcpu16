@@ -1,6 +1,6 @@
 package br.com.leandromoreira.jdcpu16br;
 
-import static br.com.leandromoreira.jdcpu16br.OpCode.*;
+import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
 
 public class CPU {
 
@@ -30,7 +30,7 @@ public class CPU {
 
             private int cycles = 2;
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 final int syscall = (parameter.instruction() >> 0x4) & 0x6;
                 final int a = (parameter.instruction() >> (0x4 + 0x6));
                 switch (syscall) {
@@ -49,13 +49,13 @@ public class CPU {
         };
         instruction[SET] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] = register[parameter.b()];
             }
         };
         instruction[ADD] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] += register[parameter.b()];
                 overflow = ((register[parameter.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
             }
@@ -67,7 +67,7 @@ public class CPU {
         };
         instruction[SUB] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] -= register[parameter.b()];
                 overflow = (register[parameter.a()] < ZERO) ? OxFFFF : ZERO;
             }
@@ -79,7 +79,7 @@ public class CPU {
         };
         instruction[MUL] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] *= register[parameter.b()];
                 overflow = ((register[parameter.a()] * register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
             }
@@ -91,7 +91,7 @@ public class CPU {
         };
         instruction[DIV] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 if (register[parameter.b()] != ZERO) {
                     register[parameter.a()] /= register[parameter.b()];
                     overflow = ((register[parameter.a()] << WORD_SIZE) / register[parameter.b()]) & OxFFFF;
@@ -107,7 +107,7 @@ public class CPU {
         };
         instruction[MOD] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] = (register[parameter.b()] == ZERO) ? ZERO : register[parameter.a()] % register[parameter.b()];
             }
 
@@ -118,7 +118,7 @@ public class CPU {
         };
         instruction[SHL] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] <<= register[parameter.b()];
                 overflow = ((register[parameter.a()] << register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
             }
@@ -130,7 +130,7 @@ public class CPU {
         };
         instruction[SHR] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] >>= register[parameter.b()];
                 overflow = ((register[parameter.a()] << WORD_SIZE) >> register[parameter.b()]) & OxFFFF;
             }
@@ -142,25 +142,25 @@ public class CPU {
         };
         instruction[AND] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] &= register[parameter.b()];
             }
         };
         instruction[BOR] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] |= register[parameter.b()];
             }
         };
         instruction[XOR] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 register[parameter.a()] ^= register[parameter.b()];
             }
         };
         instruction[IFE] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 if (register[parameter.a()] != register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
@@ -174,7 +174,7 @@ public class CPU {
         };
         instruction[IFN] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 if (register[parameter.a()] == register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
@@ -188,7 +188,7 @@ public class CPU {
         };
         instruction[IFG] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 if (register[parameter.a()] < register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
@@ -202,7 +202,7 @@ public class CPU {
         };
         instruction[IFB] = new DefaultInstruction() {
 
-            public void execute(final OpCode parameter) {
+            public void execute(final Word parameter) {
                 if (register[parameter.a()] > register[parameter.b()]) {
                     cost++;
                     defaultSumToNextInstruction = 0;
@@ -217,9 +217,9 @@ public class CPU {
     }
 
     public void step() {
-        final OpCode op = new OpCode(readFrom(programCounter));
-        final Instruction currentInstruction = instruction[op.code()];
-        currentInstruction.execute(op);
+        final Word word = new Word(readFrom(programCounter));
+        final Instruction currentInstruction = instruction[word.code()];
+        currentInstruction.execute(word);
         programCounter += currentInstruction.sumToPC();
     }
 

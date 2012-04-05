@@ -2,18 +2,18 @@ package br.com.leandromoreira.jdcpu16br;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static br.com.leandromoreira.jdcpu16br.OpCode.*;
+import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestOpCode {
 
     public static final int WORD = 0x7C01;
-    private OpCode opCode;
+    private Word opCode;
 
     @Before
     public void setup() {
-        opCode = new OpCode(WORD);
+        opCode = new Word(WORD);
     }
 
     @Test
