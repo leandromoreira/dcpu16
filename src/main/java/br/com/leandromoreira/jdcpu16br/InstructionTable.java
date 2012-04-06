@@ -104,13 +104,13 @@ public class InstructionTable {
             public int cycles() {
                 return 3 + cost;
             }
-        };/*
+        };
         instruction[SHL] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] <<= cpu.register(parameter.b()];
-                overflow = ((cpu.register(parameter.a()] << cpu.register(parameter.b()]) >> WORD_SIZE) & OxFFFF;
+                cpu.setOverflow(((cpu.parameterA().read() << cpu.parameterB().read()) >> 16) & 0xFFFF);
+                cpu.parameterA().write(cpu.parameterA().read() << cpu.parameterB().read());
             }
 
             @Override
@@ -122,15 +122,15 @@ public class InstructionTable {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] >>= cpu.register(parameter.b()];
-                overflow = ((cpu.register(parameter.a()] << WORD_SIZE) >> cpu.register(parameter.b()]) & OxFFFF;
+                cpu.setOverflow(((cpu.parameterA().read() << 16) >> cpu.parameterB().read()) & 0xFFFF);
+                cpu.parameterA().write(cpu.parameterA().read() >> cpu.parameterB().read());
             }
 
             @Override
             public int cycles() {
                 return 2 + cost;
             }
-        };
+        };/*
         instruction[AND] = new DefaultInstruction() {
 
             @Override
