@@ -26,6 +26,7 @@ public class CPU {
     private static final int SP_DECODER = 0x1B;
     private static final int PC_DECODER = 0x1C;
     private static final int O_DECODER = 0x1D;
+    private static final int NEXT_WORD_INDIRECT = 0x1E;
     private static final int NEXT_WORD = 0x1F;
     private int[] memory = new int[MEMORY_SIZE];
     private int[] register = new int[0x8];
@@ -115,6 +116,17 @@ public class CPU {
             @Override
             public int read() {
                 return overflow;
+            }
+        };
+        decoder[NEXT_WORD_INDIRECT] = new ParameterDecoder(NEXT_WORD_INDIRECT) {
+
+            @Override
+            public void write(final int value) {
+            }
+
+            @Override
+            public int read() {
+                return readFromRAM(readFromRAM(++programCounter));
             }
         };
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
