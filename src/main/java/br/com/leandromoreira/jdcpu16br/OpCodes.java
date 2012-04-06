@@ -1,5 +1,9 @@
 package br.com.leandromoreira.jdcpu16br;
 
+import java.lang.reflect.Field;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class OpCodes {
 
     public static final int NOT_BASIC = 0x00;
@@ -19,4 +23,23 @@ public class OpCodes {
     public static final int IFN = 0x0D;
     public static final int IFG = 0x0E;
     public static final int IFB = 0x0F;
+
+    public final static String toString(final int opcode) {
+        if (opcode < 0 | opcode > IFB) {
+            throw new IllegalArgumentException("Invalid opcode! [" + opcode + "]");
+        }
+        final Field[] declaredFields = OpCodes.class.getDeclaredFields();
+        final String[] assembler = new String[declaredFields.length];
+        final OpCodes instance = new OpCodes();
+        for (final Field field : declaredFields) {
+            try {
+                assembler[field.getInt(instance)] = field.getName();
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(OpCodes.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(OpCodes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return assembler[opcode];
+    }
 }
