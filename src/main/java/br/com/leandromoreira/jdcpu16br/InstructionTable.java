@@ -11,7 +11,7 @@ public class InstructionTable {
     public Instruction[] instructionSet(final CPU cpu) {
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
         
-        instruction[NOT_BASIC] = new DefaultInstruction() {
+        /*instruction[NOT_BASIC] = new DefaultInstruction() {
 
             private int cycles = 2;
 
@@ -32,7 +32,7 @@ public class InstructionTable {
             public int cycles() {
                 return cycles + cost;
             }
-        };
+        };*/
         instruction[SET] = new DefaultInstruction() {
 
             @Override
@@ -67,20 +67,20 @@ public class InstructionTable {
             public int cycles() {
                 return 2 + cost;
             }
-        };/*
+        };
         instruction[MUL] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] *= cpu.register(parameter.b()];
-                overflow = ((cpu.register(parameter.a()] * cpu.register(parameter.b()]) >> WORD_SIZE) & OxFFFF;
+                cpu.parameterA().write(cpu.parameterA().read() * cpu.parameterB().read());
+                cpu.setOverflow((cpu.parameterA().read() >> 16) & 0xFFF);
             }
 
             @Override
             public int cycles() {
                 return 2 + cost;
             }
-        };
+        };/*
         instruction[DIV] = new DefaultInstruction() {
 
             @Override
