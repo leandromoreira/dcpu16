@@ -39,13 +39,14 @@ public class CPU {
     }
 
     private void fillParameterDecoder() {
-        fillDirectParameter();
-        fillIndirectParameter();
+        fillDecoderDirectRegister();
+        fillDecoderIndirectRegister();
+        fillDecoderIndirectNextWordPlusRegister();
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
 
             @Override
             public void write(final int value) {
-                throw new UnsupportedOperationException(OpCodes.toString(index)+" had tried to write("+value+")");
+                throw new UnsupportedOperationException(OpCodes.toString(index) + " had tried to write(" + value + ")");
             }
 
             @Override
@@ -55,7 +56,7 @@ public class CPU {
         };
     }
 
-    private void fillDirectParameter() {
+    private void fillDecoderDirectRegister() {
         for (int registerIndex = A; registerIndex <= J; registerIndex++) {
             decoder[registerIndex] = new ParameterDecoder(registerIndex) {
 
@@ -72,7 +73,7 @@ public class CPU {
         }
     }
 
-    private void fillIndirectParameter() {
+    private void fillDecoderIndirectRegister() {
         for (int registerIndex = 0x08; registerIndex <= 0x0F; registerIndex++) {
             decoder[registerIndex] = new ParameterDecoder(registerIndex) {
 
@@ -84,6 +85,27 @@ public class CPU {
                 @Override
                 public int read() {
                     return readFromRAM(register[index]);
+                }
+            };
+        }
+    }
+
+    private void fillDecoderIndirectNextWordPlusRegister() {
+        for (int registerIndex = 0x10; registerIndex <= 0x17; registerIndex++) {
+            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+
+                @Override
+                public void write(int value) {
+                    writeAtRAM(nextWordPlusRegister(), value);
+                }
+
+                @Override
+                public int read() {
+                    return readFromRAM(nextWordPlusRegister());
+                }
+
+                private int nextWordPlusRegister() {
+                    return readFromRAM(++programCounter) + register[index];
                 }
             };
         }
