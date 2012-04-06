@@ -49,6 +49,7 @@ public class CPU {
         fillDecoderDirectRegister();
         fillDecoderIndirectRegister();
         fillDecoderIndirectNextWordPlusRegister();
+        fillDecoderLiteral();
         decoder[POP] = new ParameterDecoder(POP) {
 
             @Override
@@ -171,6 +172,22 @@ public class CPU {
                 @Override
                 public int read() {
                     return readFromRAM(register[index]);
+                }
+            };
+        }
+    }
+
+    private void fillDecoderLiteral() {
+        for (int registerIndex = 0x20; registerIndex <= 0x3F; registerIndex++) {
+            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+
+                @Override
+                public void write(int value) {
+                }
+
+                @Override
+                public int read() {
+                    return index - 0x20;
                 }
             };
         }
