@@ -50,6 +50,24 @@ public class TestCPU {
         cpu.setRegister(B, 0x5);
         memory.writeAt(0x0000, 0b000001_000000_0010);
         cpu.step();
-        assertThat(cpu.register(A), is(0x5+0x5));
+        assertThat(cpu.register(A), is(0x5 + 0x5));
+    }
+
+    @Test
+    public void when_there_is_no_oveflow_at_add() {
+        cpu.setRegister(A, 0x5);
+        cpu.setRegister(B, 0x5);
+        memory.writeAt(0x0000, 0b000001_000000_0010);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0x0000));
+    }
+
+    @Test
+    public void when_there_is_an_oveflow_at_add() {
+        cpu.setRegister(A, 0xFFFF);
+        cpu.setRegister(B, 0x5);
+        memory.writeAt(0x0000, 0b000001_000000_0010);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0x0001));
     }
 }
