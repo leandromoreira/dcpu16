@@ -130,28 +130,29 @@ public class InstructionTable {
             public int cycles() {
                 return 2 + cost;
             }
-        };/*
+        };
         instruction[AND] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] &= cpu.register(parameter.b()];
+                cpu.parameterA().write(cpu.parameterA().read() & cpu.parameterB().read());
             }
         };
         instruction[BOR] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] |= cpu.register(parameter.b()];
+                cpu.parameterA().write(cpu.parameterA().read() | cpu.parameterB().read());
             }
         };
         instruction[XOR] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] ^= cpu.register(parameter.b()];
+                cpu.parameterA().write(cpu.parameterA().read() ^ cpu.parameterB().read());
+
             }
-        };
+        };/*
         instruction[IFE] = new DefaultInstruction() {
 
             @Override

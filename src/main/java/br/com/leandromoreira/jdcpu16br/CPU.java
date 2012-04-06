@@ -86,17 +86,17 @@ public class CPU {
     public void step() {
         final Word word = new Word(memory.readFrom(programCounter));
         final Instruction instruction = instructions[word.code()];
-        decodeValuesParameter(word);
+        decodeAandBParametersFrom(word);
         instruction.execute(word);
         programCounter += instruction.sumToPC();
     }
 
-    private void decodeValuesParameter(final Word parameter) {
-        a = decode(parameter.a());
-        b = decode(parameter.b());
+    private void decodeAandBParametersFrom(final Word parameter) {
+        a = decoderFor(parameter.a());
+        b = decoderFor(parameter.b());
     }
 
-    public ParameterDecoder decode(final int value) {
+    public ParameterDecoder decoderFor(final int value) {
         return decoders[value];
     }
 }
