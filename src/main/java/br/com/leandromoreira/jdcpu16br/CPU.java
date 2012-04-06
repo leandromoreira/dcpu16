@@ -2,9 +2,6 @@ package br.com.leandromoreira.jdcpu16br;
 
 public class CPU {
 
-    private static final int MASK_16BIT = 0xF;
-    private static final int OxFFFF = 0xFFFF;
-    private static final int WORD_SIZE = 16;
     public static final int A = 0x0;
     public static final int B = 0x1;
     public static final int C = 0x2;
@@ -95,15 +92,11 @@ public class CPU {
     }
 
     private void decodeValuesParameter(final Word parameter) {
-        a = decodeA(parameter.a());
-        b = decodeB(parameter.b());
+        a = decode(parameter.a());
+        b = decode(parameter.b());
     }
-    
-    public ParameterDecoder decodeA(final int a){
-        return decoders[a];
-    }
-    
-    public ParameterDecoder decodeB(final int b){
-        return decoders[b];
+
+    public ParameterDecoder decode(final int value) {
+        return decoders[value];
     }
 }
