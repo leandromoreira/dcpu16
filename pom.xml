@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>br.com.leandromoreira</groupId>
-    <artifactId>j-dcpu16-br</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>jdcpu16br</artifactId>
+    <version>0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>j-dcpu16-br</name>
-    <url>http://maven.apache.org</url>
+    <name>JDCPU16BR</name>
+    <url>https://github.com/leandromoreira/dcpu16</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
