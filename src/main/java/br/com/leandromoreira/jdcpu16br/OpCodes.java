@@ -23,23 +23,31 @@ public class OpCodes {
     public static final int IFN = 0x0D;
     public static final int IFG = 0x0E;
     public static final int IFB = 0x0F;
+    private static String[] assembler;
+
+    static {
+        assembler = createMappingConstantValueAndItsName();
+    }
 
     public final static String toString(final int opcode) {
         if (opcode < 0 | opcode > IFB) {
-            throw new IllegalArgumentException("Invalid opcode! [" + opcode + "]");
+            throw new IllegalArgumentException("Invalid opcode! [" + Integer.toHexString(opcode).toUpperCase() + "]");
         }
+        return assembler[opcode];
+    }
+
+    private static String[] createMappingConstantValueAndItsName() throws SecurityException {
         final Field[] declaredFields = OpCodes.class.getDeclaredFields();
-        final String[] assembler = new String[declaredFields.length];
+        final String[] mapper = new String[declaredFields.length];
         final OpCodes instance = new OpCodes();
+        
         for (final Field field : declaredFields) {
             try {
-                assembler[field.getInt(instance)] = field.getName();
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(OpCodes.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
+                mapper[field.getInt(instance)] = field.getName();
+            } catch (final IllegalArgumentException | IllegalAccessException ex) {
                 Logger.getLogger(OpCodes.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return assembler[opcode];
+        return mapper;
     }
 }
