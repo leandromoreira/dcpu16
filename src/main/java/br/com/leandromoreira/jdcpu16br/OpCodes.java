@@ -29,19 +29,19 @@ public class OpCodes {
         assembler = createMappingConstantValueAndItsName();
     }
 
-    public final static String toString(final int opcode) {
+    public static String toString(final int opcode) {
         if (opcode < 0 | opcode > IFB) {
-            throw new IllegalArgumentException("Invalid opcode! [" + Integer.toHexString(opcode).toUpperCase() + "]");
+            throw new IllegalArgumentException("Invalid opcode! [0x" + Integer.toHexString(opcode).toUpperCase() + "]");
         }
         return assembler[opcode];
     }
 
     private static String[] createMappingConstantValueAndItsName() throws SecurityException {
-        final Field[] declaredFields = OpCodes.class.getDeclaredFields();
-        final String[] mapper = new String[declaredFields.length];
+        final Field[] publicFields = OpCodes.class.getFields();
+        final String[] mapper = new String[publicFields.length];
         final OpCodes instance = new OpCodes();
         
-        for (final Field field : declaredFields) {
+        for (final Field field : publicFields) {
             try {
                 mapper[field.getInt(instance)] = field.getName();
             } catch (final IllegalArgumentException | IllegalAccessException ex) {
