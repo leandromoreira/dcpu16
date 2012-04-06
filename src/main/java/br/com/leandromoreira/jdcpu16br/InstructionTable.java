@@ -2,7 +2,7 @@ package br.com.leandromoreira.jdcpu16br;
 
 import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
 
-public class InstructionTableBuilder {
+public class InstructionTable {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
@@ -10,7 +10,6 @@ public class InstructionTableBuilder {
 
     public Instruction[] instructionSet(final CPU cpu) {
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
-        final ParameterDecoder[] decoder = new ParameterDecoderBuilder(cpu).all();
         
         instruction[NOT_BASIC] = new DefaultInstruction() {
 
@@ -40,20 +39,21 @@ public class InstructionTableBuilder {
             public void execute(final Word parameter) {
                 cpu.parameterA().write(cpu.parameterB().read());
             }
-        };/*
+        };
         instruction[ADD] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()) += cpu.register(parameter.b());
-                overflow = ((cpu.register(parameter.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
+                cpu.parameterA().write(cpu.parameterA().read() + cpu.parameterB().read());
+                final int newOverflow = (cpu.parameterA().read() > 0xFFFF )? 0x0001 : 0x0000;
+                cpu.setOverflow(newOverflow);
             }
 
             @Override
             public int cycles() {
                 return 2 + cost;
             }
-        };
+        };/*
         instruction[SUB] = new DefaultInstruction() {
 
             @Override

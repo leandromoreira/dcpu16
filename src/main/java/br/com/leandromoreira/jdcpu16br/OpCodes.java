@@ -23,27 +23,41 @@ public class OpCodes {
     public static final int IFN = 0x0D;
     public static final int IFG = 0x0E;
     public static final int IFB = 0x0F;
-    private static String[] assembler;
+    private static String[] assemblerCommon;
+    private static String[] assemblerSyscall;
 
     static {
-        assembler = createMappingConstantValueAndItsName();
+        final boolean toSysCall = true;
+        assemblerCommon = createMappingConstantValueAndItsName(!toSysCall);
+        assemblerSyscall = createMappingConstantValueAndItsName(toSysCall);
     }
 
     public static String toString(final int opcode) {
         if (opcode < 0 | opcode > IFB) {
             throw new IllegalArgumentException("Invalid opcode! [0x" + Integer.toHexString(opcode).toUpperCase() + "]");
         }
-        return assembler[opcode];
+        return assemblerCommon[opcode];
     }
 
-    private static String[] createMappingConstantValueAndItsName() throws SecurityException {
+    public static String syscallToString(final int opcode) {
+        if (opcode < 0 | opcode > IFB) {
+            throw new IllegalArgumentException("Invalid opcode! [0x" + Integer.toHexString(opcode).toUpperCase() + "]");
+        }
+        return assemblerSyscall[opcode];
+    }
+
+    private static String[] createMappingConstantValueAndItsName(final boolean isSysCall) throws SecurityException {
         final Field[] publicFields = OpCodes.class.getFields();
         final String[] mapper = new String[publicFields.length];
         final OpCodes instance = new OpCodes();
-        
+
         for (final Field field : publicFields) {
             try {
-                mapper[field.getInt(instance)] = field.getName();
+                final boolean fieldStartsWithSYSCALL = field.getName().startsWith("SYSCALL");
+                final boolean ignoreField = (isSysCall) ? !fieldStartsWithSYSCALL : fieldStartsWithSYSCALL;
+                if (!ignoreField) {
+                    mapper[field.getInt(instance)] = field.getName();
+                }
             } catch (final IllegalArgumentException | IllegalAccessException ex) {
                 Logger.getLogger(OpCodes.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -9,30 +9,30 @@ import org.junit.Test;
 public class TestWord {
 
     public static final int WORD = 0b011111_000000_0001;
-    private Word opCode;
+    private Word instruction;
 
     @Before
     public void setup() {
-        opCode = new Word(WORD);
+        instruction = new Word(WORD);
     }
 
     @Test
     public void returns_instruction() {
-        assertThat(opCode.instruction(), is(WORD));
+        assertThat(instruction.instruction(), is(WORD));
     }
 
     @Test
     public void returns_opcode() {
-        assertThat(opCode.code(), is(SET));
+        assertThat(instruction.code(), is(SET));
     }
 
     @Test
     public void returns_a() {
-        assertThat(opCode.a(), is(0b000000));
+        assertThat(instruction.a(), is(0b000000));
     }
 
     @Test
     public void returns_b() {
-        assertThat(opCode.b(), is(0b011111));
+        assertThat(instruction.b(), is(0b011111));
     }
 }

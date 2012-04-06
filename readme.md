@@ -1,4 +1,4 @@
-# Yet another DCPU16 java implementation
+#JDCPU16BR - Yet another DCPU16 java implementation
 
 ##Resources
 

@@ -2,13 +2,9 @@ package br.com.leandromoreira.jdcpu16br;
 
 public class CPU {
 
-    private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
-    private static final int NUMBER_OF_DECODERS = 0x40;
     private static final int MASK_16BIT = 0xF;
     private static final int OxFFFF = 0xFFFF;
     private static final int WORD_SIZE = 16;
-    private static final int ZERO = 0;
-    private static final int ONE = 1;
     public static final int A = 0x0;
     public static final int B = 0x1;
     public static final int C = 0x2;
@@ -20,15 +16,16 @@ public class CPU {
     private int[] register = new int[0x8];
     private int programCounter, stackPointer;
     private int overflow;
-    private Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
-    private ParameterDecoder[] decoder;
-    private Memory memory = new Memory();
+    private final Instruction[] instructions;
+    private final ParameterDecoder[] decoders;
+    private final Memory memory;
     private ParameterDecoder a, b;
 
     public CPU() {
+        memory = new Memory();
         programCounter = stackPointer = overflow = 0x0000;
-        instruction = new InstructionTableBuilder().instructionSet(this);
-        decoder = new ParameterDecoderBuilder(this).all();
+        instructions = new InstructionTable().instructionSet(this);
+        decoders = new AllParametersDecoder(this).all();
     }
 
     public ParameterDecoder parameterA() {
@@ -91,14 +88,22 @@ public class CPU {
 
     public void step() {
         final Word word = new Word(memory.readFrom(programCounter));
-        final Instruction currentInstruction = instruction[word.code()];
+        final Instruction instruction = instructions[word.code()];
         decodeValuesParameter(word);
-        currentInstruction.execute(word);
-        programCounter += currentInstruction.sumToPC();
+        instruction.execute(word);
+        programCounter += instruction.sumToPC();
     }
 
     private void decodeValuesParameter(final Word parameter) {
-        a = decoder[parameter.a()];
-        b = decoder[parameter.b()];
+        a = decodeA(parameter.a());
+        b = decodeB(parameter.b());
+    }
+    
+    public ParameterDecoder decodeA(final int a){
+        return decoders[a];
+    }
+    
+    public ParameterDecoder decodeB(final int b){
+        return decoders[b];
     }
 }

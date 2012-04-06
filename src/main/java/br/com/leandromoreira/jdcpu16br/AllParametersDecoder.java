@@ -1,6 +1,6 @@
 package br.com.leandromoreira.jdcpu16br;
 
-public class ParameterDecoderBuilder {
+public class AllParametersDecoder {
 
     private static final int NUMBER_OF_DECODERS = 0x40;
     private static final int POP = 0x18;
@@ -13,7 +13,7 @@ public class ParameterDecoderBuilder {
     private static final int NEXT_WORD = 0x1F;
     private final CPU cpu;
 
-    public ParameterDecoderBuilder(final CPU cpu) {
+    public AllParametersDecoder(final CPU cpu) {
         this.cpu = cpu;
     }
 
