@@ -115,4 +115,24 @@ public class TestCPU {
         cpu.step();
         assertThat(cpu.getOverflow(), is(((0x5 * 0x5) >> 16) & 0xFFFF));
     }
+
+    @Test
+    public void it_performs_div_a_to_b() {
+        cpu.setRegister(A, 0x10);
+        cpu.setRegister(B, 0x5);
+        memory.writeAt(0x0000, 0b000001_000000_0101);
+        cpu.step();
+        assertThat(cpu.register(A), is(0x10 / 0x5));
+        assertThat(cpu.getOverflow(), is(((cpu.register(A) << 16) / cpu.register(B)) & 0xFFFF));
+    }
+
+    @Test
+    public void when_b_is_zero_there_is_no_division() {
+        cpu.setRegister(A, 0x10);
+        cpu.setRegister(B, 0x0);
+        memory.writeAt(0x0000, 0b000001_000000_0101);
+        cpu.step();
+        assertThat(cpu.register(A), is(0x0));
+        assertThat(cpu.getOverflow(), is(0x0));
+    }
 }
