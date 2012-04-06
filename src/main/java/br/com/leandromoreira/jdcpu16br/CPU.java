@@ -6,7 +6,6 @@ public class CPU {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int NUMBER_OF_DECODERS = 0x40;
-    private static final int MEMORY_SIZE = 0x10000;
     private static final int MASK_16BIT = 0xF;
     private static final int OxFFFF = 0xFFFF;
     private static final int WORD_SIZE = 16;
@@ -28,17 +27,21 @@ public class CPU {
     private static final int O_DECODER = 0x1D;
     private static final int NEXT_WORD_INDIRECT = 0x1E;
     private static final int NEXT_WORD = 0x1F;
-    private int[] memory = new int[MEMORY_SIZE];
     private int[] register = new int[0x8];
     private int programCounter, stackPointer;
     private int overflow;
     private Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
     private ParameterDecoder[] decoder = new ParameterDecoder[NUMBER_OF_DECODERS];
+    private Memory memory = new Memory();
 
     public CPU() {
         programCounter = stackPointer = overflow = 0x0000;
         fillInstructionTable();
         fillParameterDecoder();
+    }
+
+    public Memory memory() {
+        return memory;
     }
 
     public int register(final int index) {
@@ -58,7 +61,7 @@ public class CPU {
 
             @Override
             public int read() {
-                return readFromRAM(stackPointer++);
+                return memory.readFrom(stackPointer++);
             }
         };
         decoder[PEEK] = new ParameterDecoder(PEEK) {
@@ -69,7 +72,7 @@ public class CPU {
 
             @Override
             public int read() {
-                return readFromRAM(stackPointer);
+                return memory.readFrom(stackPointer);
             }
         };
         decoder[PUSH] = new ParameterDecoder(PUSH) {
@@ -80,7 +83,7 @@ public class CPU {
 
             @Override
             public int read() {
-                return readFromRAM(--stackPointer);
+                return memory.readFrom(--stackPointer);
             }
         };
         decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
@@ -127,7 +130,7 @@ public class CPU {
 
             @Override
             public int read() {
-                return readFromRAM(readFromRAM(++programCounter));
+                return memory.readFrom(memory.readFrom(++programCounter));
             }
         };
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
@@ -138,7 +141,7 @@ public class CPU {
 
             @Override
             public int read() {
-                return readFromRAM(++programCounter);
+                return memory.readFrom(++programCounter);
             }
         };
     }
@@ -166,12 +169,12 @@ public class CPU {
 
                 @Override
                 public void write(int value) {
-                    writeAtRAM(register[index - 0x8], value);
+                    memory.writeAt(register[index - 0x8], value);
                 }
 
                 @Override
                 public int read() {
-                    return readFromRAM(register[index - 0x8]);
+                    return memory.readFrom(register[index - 0x8]);
                 }
             };
         }
@@ -199,16 +202,16 @@ public class CPU {
 
                 @Override
                 public void write(int value) {
-                    writeAtRAM(nextWordPlusRegister(), value);
+                    memory.writeAt(nextWordPlusRegister(), value);
                 }
 
                 @Override
                 public int read() {
-                    return readFromRAM(nextWordPlusRegister());
+                    return memory.readFrom(nextWordPlusRegister());
                 }
 
                 private int nextWordPlusRegister() {
-                    return readFromRAM(++programCounter) + register[index];
+                    return memory.readFrom(++programCounter) + register[index];
                 }
             };
         }
@@ -424,18 +427,10 @@ public class CPU {
     }
 
     public void step() {
-        final Word word = new Word(readFromRAM(programCounter));
+        final Word word = new Word(memory.readFrom(programCounter));
         final Instruction currentInstruction = instruction[word.code()];
         currentInstruction.execute(word);
         programCounter += currentInstruction.sumToPC();
-    }
-
-    public int readFromRAM(final int address) {
-        return memory[address];
-    }
-
-    public void writeAtRAM(final int address, final int value) {
-        memory[address] = value;
     }
 
     public void setRegister(final int index, final int value) {
