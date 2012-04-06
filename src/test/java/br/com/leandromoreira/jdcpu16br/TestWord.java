@@ -6,7 +6,7 @@ import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestOpCode {
+public class TestWord {
 
     public static final int WORD = 0x7C01;
     private Word opCode;

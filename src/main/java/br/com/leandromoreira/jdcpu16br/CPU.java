@@ -5,27 +5,73 @@ import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
 public class CPU {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
+    private static final int NUMBER_OF_DECODERS = 0x40;
     private static final int MEMORY_SIZE = 0x10000;
     private static final int MASK_16BIT = 0xF;
     private static final int OxFFFF = 0xFFFF;
     private static final int WORD_SIZE = 16;
     private static final int ZERO = 0;
     private static final int ONE = 1;
-    private static final int A = 0x0;
-    private static final int B = 0x1;
-    private static final int C = 0x2;
-    private static final int X = 0x3;
-    private static final int Y = 0x4;
-    private static final int Z = 0x5;
-    private static final int I = 0x6;
-    private static final int J = 0x7;
+    public static final int A = 0x0;
+    public static final int B = 0x1;
+    public static final int C = 0x2;
+    public static final int X = 0x3;
+    public static final int Y = 0x4;
+    public static final int Z = 0x5;
+    public static final int I = 0x6;
+    public static final int J = 0x7;
+    private static final int NEXT_WORD = 0x1F;
     private int[] memory = new int[MEMORY_SIZE];
     private int[] register = new int[0x8];
     private int programCounter, stackPointer;
     private int overflow;
     private Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
+    private ParameterDecoder[] decoder = new ParameterDecoder[NUMBER_OF_DECODERS];
 
-    public void fillInstructionTable() {
+    public CPU() {
+        programCounter = stackPointer = overflow = 0x0000;
+        fillInstructionTable();
+        fillParameterDecoder();
+    }
+
+    public int register(final int index) {
+        return register[index];
+    }
+
+    private void fillParameterDecoder() {
+        fillDirectParameter();
+        decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
+
+            @Override
+            public void write(final int value) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public int read() {
+                return readFromRAM(++programCounter);
+            }
+        };
+    }
+
+    private void fillDirectParameter() {
+        for (int registerIndex = A; registerIndex <= J; registerIndex++) {
+            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+
+                @Override
+                public void write(int value) {
+                    register[index] = value;
+                }
+
+                @Override
+                public int read() {
+                    return register[index];
+                }
+            };
+        }
+    }
+
+    private void fillInstructionTable() {
         instruction[NOT_BASIC] = new DefaultInstruction() {
 
             private int cycles = 2;
@@ -50,7 +96,9 @@ public class CPU {
         instruction[SET] = new DefaultInstruction() {
 
             public void execute(final Word parameter) {
-                register[parameter.a()] = register[parameter.b()];
+                final ParameterDecoder a = decoder[parameter.a()];
+                final ParameterDecoder b = decoder[parameter.b()];
+                a.write(b.read());
             }
         };
         instruction[ADD] = new DefaultInstruction() {
@@ -217,13 +265,30 @@ public class CPU {
     }
 
     public void step() {
-        final Word word = new Word(readFrom(programCounter));
+        final Word word = new Word(readFromRAM(programCounter));
         final Instruction currentInstruction = instruction[word.code()];
         currentInstruction.execute(word);
         programCounter += currentInstruction.sumToPC();
     }
 
-    public int readFrom(final int address) {
+    public int readFromRAM(final int address) {
         return memory[address];
+    }
+
+    public void writeAtRAM(final int address, final int value) {
+        memory[address] = value;
+    }
+
+    private abstract class ParameterDecoder {
+
+        protected final int index;
+
+        public ParameterDecoder(final int index) {
+            this.index = index;
+        }
+
+        public abstract void write(final int value);
+
+        public abstract int read();
     }
 }
