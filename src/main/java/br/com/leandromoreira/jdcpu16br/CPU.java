@@ -20,6 +20,9 @@ public class CPU {
     public static final int Z = 0x5;
     public static final int I = 0x6;
     public static final int J = 0x7;
+    private static final int POP = 0x18;
+    private static final int PEEK = 0x19;
+    private static final int PUSH = 0x1A;
     private static final int NEXT_WORD = 0x1F;
     private int[] memory = new int[MEMORY_SIZE];
     private int[] register = new int[0x8];
@@ -42,6 +45,39 @@ public class CPU {
         fillDecoderDirectRegister();
         fillDecoderIndirectRegister();
         fillDecoderIndirectNextWordPlusRegister();
+        decoder[POP] = new ParameterDecoder(POP) {
+
+            @Override
+            public void write(final int value) {
+            }
+
+            @Override
+            public int read() {
+                return readFromRAM(stackPointer++);
+            }
+        };
+        decoder[PEEK] = new ParameterDecoder(PEEK) {
+
+            @Override
+            public void write(final int value) {
+            }
+
+            @Override
+            public int read() {
+                return readFromRAM(stackPointer);
+            }
+        };
+        decoder[PUSH] = new ParameterDecoder(PUSH) {
+
+            @Override
+            public void write(final int value) {
+            }
+
+            @Override
+            public int read() {
+                return readFromRAM(--stackPointer);
+            }
+        };
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
 
             @Override
