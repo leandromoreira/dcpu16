@@ -268,4 +268,12 @@ public class TestCPU {
         cpu.step();
         assertThat(cpu.register(A), is(0x3 + 0x6));
     }
+
+    @Test
+    public void it_does_perform_syscall_jsr() {
+        cpu.setRegister(A, 0x6);
+        memory.writeAt(0x0000, 0b000000_000001_0000);
+        cpu.step();
+        assertThat(cpu.getProgramCounter(), is(cpu.register(A)));
+    }
 }

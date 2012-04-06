@@ -6,36 +6,44 @@ public class InstructionTable {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
-    private static final int ONE = 1;
 
     public Instruction[] instructionSet(final CPU cpu) {
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
 
-        /*
-         * instruction[NOT_BASIC] = new DefaultInstruction() {
-         *
-         * private int cycles = 2;
-         *
-         * @Override public void execute(final Word parameter) { final int
-         * syscall = (parameter.instruction() >> 0x4) & 0x6; final int a =
-         * (parameter.instruction() >> (0x4 + 0x6)); switch (syscall) { case
-         * SYSCALL_JSR: cpu.setStackPointer(cpu.getProgramCounter() + ONE);
-         * cpu.setProgramCounter(cpu.register(a)); defaultSumToNextInstruction =
-         * ZERO; break; } }
-         *
-         * @Override public int cycles() { return cycles + cost; } };
-         */
+        instruction[NOT_BASIC] = new DefaultInstruction() {
+
+            private int cycles = 2;
+
+            @Override
+            public void execute() {
+                final int syscall = cpu.getCurrentWord().a();
+                final int a = cpu.getCurrentWord().b();
+                final ParameterDecoder aDecoded = cpu.decoderFor(a);
+                switch (syscall) {
+                    case SYSCALL_JSR:
+                        cpu.setStackPointer(cpu.getNextProgramCounter());
+                        cpu.setProgramCounter(aDecoded.read());
+                        defaultSumToNextInstruction = ZERO;
+                        break;
+                }
+            }
+
+            @Override
+            public int cycles() {
+                return cycles + cost;
+            }
+        };
         instruction[SET] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterB().read());
             }
         };
         instruction[ADD] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() + cpu.parameterB().read());
                 final int newOverflow = (cpu.parameterA().read() > 0xFFFF) ? 0x0001 : 0x0000;
                 cpu.setOverflow(newOverflow);
@@ -49,7 +57,7 @@ public class InstructionTable {
         instruction[SUB] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() - cpu.parameterB().read());
                 final int newOverflow = (cpu.parameterA().read() < 0x0000) ? 0xFFFF : 0x0000;
                 cpu.setOverflow(newOverflow);
@@ -63,7 +71,7 @@ public class InstructionTable {
         instruction[MUL] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() * cpu.parameterB().read());
                 cpu.setOverflow((cpu.parameterA().read() >> 16) & 0xFFF);
             }
@@ -76,7 +84,7 @@ public class InstructionTable {
         instruction[DIV] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 if (cpu.parameterB().read() != ZERO) {
                     cpu.parameterA().write(cpu.parameterA().read() / cpu.parameterB().read());
                     cpu.setOverflow(((cpu.parameterA().read() << 16) / cpu.parameterB().read()) & 0xFFFF);
@@ -94,7 +102,7 @@ public class InstructionTable {
         instruction[MOD] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 final int mod = (cpu.parameterB().read() == 0) ? ZERO : cpu.parameterA().read() % cpu.parameterB().read();
                 cpu.parameterA().write(mod);
             }
@@ -107,7 +115,7 @@ public class InstructionTable {
         instruction[SHL] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.setOverflow(((cpu.parameterA().read() << cpu.parameterB().read()) >> 16) & 0xFFFF);
                 cpu.parameterA().write(cpu.parameterA().read() << cpu.parameterB().read());
             }
@@ -120,7 +128,7 @@ public class InstructionTable {
         instruction[SHR] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.setOverflow(((cpu.parameterA().read() << 16) >> cpu.parameterB().read()) & 0xFFFF);
                 cpu.parameterA().write(cpu.parameterA().read() >> cpu.parameterB().read());
             }
@@ -133,21 +141,21 @@ public class InstructionTable {
         instruction[AND] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() & cpu.parameterB().read());
             }
         };
         instruction[BOR] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() | cpu.parameterB().read());
             }
         };
         instruction[XOR] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 cpu.parameterA().write(cpu.parameterA().read() ^ cpu.parameterB().read());
 
             }
@@ -155,7 +163,7 @@ public class InstructionTable {
         instruction[IFE] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
                     cost++;
                     defaultSumToNextInstruction = 2;
@@ -170,7 +178,7 @@ public class InstructionTable {
         instruction[IFN] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
                     cost++;
                     defaultSumToNextInstruction = 2;
@@ -185,7 +193,7 @@ public class InstructionTable {
         instruction[IFG] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
+            public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
                     cost++;
                     defaultSumToNextInstruction = 2;
@@ -200,8 +208,8 @@ public class InstructionTable {
         instruction[IFB] = new DefaultInstruction() {
 
             @Override
-            public void execute(final Word parameter) {
-                if ((cpu.parameterA().read() & cpu.parameterB().read()) == 0) {
+            public void execute() {
+                if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
                     cost++;
                     defaultSumToNextInstruction = 2;
                 }

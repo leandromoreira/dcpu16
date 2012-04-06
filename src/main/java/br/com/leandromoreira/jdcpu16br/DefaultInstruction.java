@@ -6,7 +6,7 @@ public abstract class DefaultInstruction implements Instruction {
     protected int defaultSumToNextInstruction = 1;
 
     @Override
-    public abstract void execute(final Word opcode);
+    public abstract void execute();
 
     @Override
     public int cycles() {

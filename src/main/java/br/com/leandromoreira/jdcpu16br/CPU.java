@@ -17,12 +17,17 @@ public class CPU {
     private final ParameterDecoder[] decoders;
     private final Memory memory;
     private ParameterDecoder a, b;
+    private Word currentWord;
 
     public CPU() {
         memory = new Memory();
         programCounter = stackPointer = overflow = 0x0000;
         instructions = new InstructionTable().instructionSet(this);
         decoders = new AllParametersDecoder(this).all();
+    }
+
+    public Word getCurrentWord() {
+        return currentWord;
     }
 
     public ParameterDecoder parameterA() {
@@ -84,16 +89,13 @@ public class CPU {
     }
 
     public void step() {
-        final Word word = new Word(memory.readFrom(programCounter));
-        final Instruction instruction = instructions[word.code()];
-        decodeAandBParametersFrom(word);
-        instruction.execute(word);
+        currentWord = new Word(memory.readFrom(programCounter));
+        a = decoderFor(currentWord.a());
+        b = decoderFor(currentWord.b());
+        final Instruction instruction = instructions[currentWord.code()];
+        
+        instruction.execute();
         programCounter += instruction.sumToPC();
-    }
-
-    private void decodeAandBParametersFrom(final Word parameter) {
-        a = decoderFor(parameter.a());
-        b = decoderFor(parameter.b());
     }
 
     public ParameterDecoder decoderFor(final int value) {
