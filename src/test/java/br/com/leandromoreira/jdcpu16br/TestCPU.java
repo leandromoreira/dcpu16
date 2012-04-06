@@ -70,4 +70,31 @@ public class TestCPU {
         cpu.step();
         assertThat(cpu.getOverflow(), is(0x0001));
     }
+
+    @Test
+    public void it_performs_sub_a_to_b() {
+        cpu.setRegister(A, 0x10);
+        cpu.setRegister(B, 0x5);
+        memory.writeAt(0x0000, 0b000001_000000_0011);
+        cpu.step();
+        assertThat(cpu.register(A), is(0x10 - 0x5));
+    }
+
+    @Test
+    public void when_there_is_no_underflow_at_sub() {
+        cpu.setRegister(A, 0x5);
+        cpu.setRegister(B, 0x5);
+        memory.writeAt(0x0000, 0b000001_000000_0011);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0x0000));
+    }
+
+    @Test
+    public void when_there_is_an_underflow_at_sub() {
+        cpu.setRegister(A, 0x5);
+        cpu.setRegister(B, 0x6);
+        memory.writeAt(0x0000, 0b000001_000000_0011);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0xFFFF));
+    }
 }

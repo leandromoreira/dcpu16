@@ -53,20 +53,21 @@ public class InstructionTable {
             public int cycles() {
                 return 2 + cost;
             }
-        };/*
+        };
         instruction[SUB] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] -= cpu.register(parameter.b()];
-                overflow = (cpu.register(parameter.a()] < ZERO) ? OxFFFF : ZERO;
+                cpu.parameterA().write(cpu.parameterA().read() - cpu.parameterB().read());
+                final int newOverflow = (cpu.parameterA().read() < 0x0000 )? 0xFFFF : 0x0000;
+                cpu.setOverflow(newOverflow);
             }
 
             @Override
             public int cycles() {
                 return 2 + cost;
             }
-        };
+        };/*
         instruction[MUL] = new DefaultInstruction() {
 
             @Override
