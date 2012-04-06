@@ -1,14 +1,14 @@
 package br.com.leandromoreira.jdcpu16br;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
+import static br.com.leandromoreira.jdcpu16br.OpCodes.SET;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestWord {
 
-    public static final int WORD = 0x7C01;
+    public static final int WORD = 0b011111_000000_0001;
     private Word opCode;
 
     @Before
@@ -28,11 +28,11 @@ public class TestWord {
 
     @Test
     public void returns_a() {
-        assertThat(opCode.a(), is(0x00));
+        assertThat(opCode.a(), is(0b000000));
     }
 
     @Test
     public void returns_b() {
-        assertThat(opCode.b(), is(0x1F));
+        assertThat(opCode.b(), is(0b011111));
     }
 }

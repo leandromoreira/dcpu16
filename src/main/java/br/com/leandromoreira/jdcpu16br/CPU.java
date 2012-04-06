@@ -40,6 +40,7 @@ public class CPU {
 
     private void fillParameterDecoder() {
         fillDirectParameter();
+        fillIndirectParameter();
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
 
             @Override
@@ -71,11 +72,29 @@ public class CPU {
         }
     }
 
+    private void fillIndirectParameter() {
+        for (int registerIndex = 0x08; registerIndex <= 0x0F; registerIndex++) {
+            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+
+                @Override
+                public void write(int value) {
+                    writeAtRAM(register[index], value);
+                }
+
+                @Override
+                public int read() {
+                    return readFromRAM(register[index]);
+                }
+            };
+        }
+    }
+
     private void fillInstructionTable() {
         instruction[NOT_BASIC] = new DefaultInstruction() {
 
             private int cycles = 2;
 
+            @Override
             public void execute(final Word parameter) {
                 final int syscall = (parameter.instruction() >> 0x4) & 0x6;
                 final int a = (parameter.instruction() >> (0x4 + 0x6));
@@ -95,6 +114,7 @@ public class CPU {
         };
         instruction[SET] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 final ParameterDecoder a = decoder[parameter.a()];
                 final ParameterDecoder b = decoder[parameter.b()];
@@ -103,6 +123,7 @@ public class CPU {
         };
         instruction[ADD] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] += register[parameter.b()];
                 overflow = ((register[parameter.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
@@ -115,6 +136,7 @@ public class CPU {
         };
         instruction[SUB] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] -= register[parameter.b()];
                 overflow = (register[parameter.a()] < ZERO) ? OxFFFF : ZERO;
@@ -127,6 +149,7 @@ public class CPU {
         };
         instruction[MUL] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] *= register[parameter.b()];
                 overflow = ((register[parameter.a()] * register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
@@ -139,6 +162,7 @@ public class CPU {
         };
         instruction[DIV] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 if (register[parameter.b()] != ZERO) {
                     register[parameter.a()] /= register[parameter.b()];
@@ -155,6 +179,7 @@ public class CPU {
         };
         instruction[MOD] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] = (register[parameter.b()] == ZERO) ? ZERO : register[parameter.a()] % register[parameter.b()];
             }
@@ -166,6 +191,7 @@ public class CPU {
         };
         instruction[SHL] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] <<= register[parameter.b()];
                 overflow = ((register[parameter.a()] << register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
@@ -178,6 +204,7 @@ public class CPU {
         };
         instruction[SHR] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] >>= register[parameter.b()];
                 overflow = ((register[parameter.a()] << WORD_SIZE) >> register[parameter.b()]) & OxFFFF;
@@ -190,24 +217,28 @@ public class CPU {
         };
         instruction[AND] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] &= register[parameter.b()];
             }
         };
         instruction[BOR] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] |= register[parameter.b()];
             }
         };
         instruction[XOR] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 register[parameter.a()] ^= register[parameter.b()];
             }
         };
         instruction[IFE] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 if (register[parameter.a()] != register[parameter.b()]) {
                     cost++;
@@ -222,6 +253,7 @@ public class CPU {
         };
         instruction[IFN] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 if (register[parameter.a()] == register[parameter.b()]) {
                     cost++;
@@ -236,6 +268,7 @@ public class CPU {
         };
         instruction[IFG] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 if (register[parameter.a()] < register[parameter.b()]) {
                     cost++;
@@ -250,6 +283,7 @@ public class CPU {
         };
         instruction[IFB] = new DefaultInstruction() {
 
+            @Override
             public void execute(final Word parameter) {
                 if (register[parameter.a()] > register[parameter.b()]) {
                     cost++;
@@ -277,6 +311,10 @@ public class CPU {
 
     public void writeAtRAM(final int address, final int value) {
         memory[address] = value;
+    }
+
+    public void setRegister(final int index, final int value) {
+        register[index] = value;
     }
 
     private abstract class ParameterDecoder {

@@ -9,8 +9,8 @@ public class Word {
 
     public Word(final int rawInstruction) {
         instruction = rawInstruction;
-        code = rawInstruction & 0xF;
-        a = (rawInstruction >> 0x4) & 0x3F;
+        code = rawInstruction & 0b1111;
+        a = (rawInstruction >> 0x4) & 0b111111;
         b = (rawInstruction >> 0xA);
     }
 
