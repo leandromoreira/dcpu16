@@ -1,7 +1,6 @@
 package br.com.leandromoreira.jdcpu16br;
 
-import static br.com.leandromoreira.jdcpu16br.CPU.A;
-import static br.com.leandromoreira.jdcpu16br.CPU.B;
+import static br.com.leandromoreira.jdcpu16br.CPU.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -199,5 +198,74 @@ public class TestCPU {
         memory.writeAt(0x0000, 0b000001_000000_1011);
         cpu.step();
         assertThat(cpu.register(A), is(0x10 ^ 0x5));
+    }
+
+    @Test
+    public void it_performs_next_instruction_when_a_equals_to_b() {
+        cpu.setRegister(A, 0x5);
+        cpu.setRegister(B, 0x5);
+        cpu.setRegister(C, 0x3);
+        memory.writeAt(0x0000, 0b000001_000000_1100);
+        memory.writeAt(0x0001, 0b000010_000000_0001);
+
+        cpu.step();
+        cpu.step();
+        assertThat(cpu.register(A), is(0x3));
+    }
+
+    @Test
+    public void it_doesnt_performs_next_instruction_when_a_is_different_from_b() {
+        cpu.setRegister(A, 0x1);
+        cpu.setRegister(B, 0x5);
+        cpu.setRegister(C, 0x3);
+        memory.writeAt(0x0000, 0b000001_000000_1100);
+        memory.writeAt(0x0001, 0b000010_000000_0010);
+        memory.writeAt(0x0002, 0b000001_000000_0010);
+
+        cpu.step();
+        cpu.step();
+        assertThat(cpu.register(A), is(0x5 + 0x1));
+    }
+
+    @Test
+    public void it_does_perform_next_instruction_when_a_equals_to_b() {
+        cpu.setRegister(A, 0x1);
+        cpu.setRegister(B, 0x5);
+        cpu.setRegister(C, 0x3);
+        memory.writeAt(0x0000, 0b000001_000000_1101);
+        memory.writeAt(0x0001, 0b000010_000000_0010);
+        memory.writeAt(0x0002, 0b000001_000000_0010);
+
+        cpu.step();
+        cpu.step();
+        assertThat(cpu.register(A), is(0x3 + 0x1));
+    }
+
+    @Test
+    public void it_does_perform_next_instruction_when_a_is_greater_than_b() {
+        cpu.setRegister(A, 0x6);
+        cpu.setRegister(B, 0x5);
+        cpu.setRegister(C, 0x3);
+        memory.writeAt(0x0000, 0b000001_000000_1110);
+        memory.writeAt(0x0001, 0b000010_000000_0010);
+        memory.writeAt(0x0002, 0b000001_000000_0010);
+
+        cpu.step();
+        cpu.step();
+        assertThat(cpu.register(A), is(0x3 + 0x6));
+    }
+
+    @Test
+    public void it_does_perform_next_instruction_when_a_and_b_different_from_zero() {
+        cpu.setRegister(A, 0x6);
+        cpu.setRegister(B, 0x5);
+        cpu.setRegister(C, 0x3);
+        memory.writeAt(0x0000, 0b000001_000000_1111);
+        memory.writeAt(0x0001, 0b000010_000000_0010);
+        memory.writeAt(0x0002, 0b000001_000000_0010);
+
+        cpu.step();
+        cpu.step();
+        assertThat(cpu.register(A), is(0x3 + 0x6));
     }
 }

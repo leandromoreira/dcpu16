@@ -23,8 +23,7 @@ public class InstructionTable {
          * cpu.setProgramCounter(cpu.register(a)); defaultSumToNextInstruction =
          * ZERO; break; } }
          *
-         * @Override public int cycles() { return cycles + cost; }
-        };
+         * @Override public int cycles() { return cycles + cost; } };
          */
         instruction[SET] = new DefaultInstruction() {
 
@@ -152,14 +151,14 @@ public class InstructionTable {
                 cpu.parameterA().write(cpu.parameterA().read() ^ cpu.parameterB().read());
 
             }
-        };/*
+        };
         instruction[IFE] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                if (cpu.register(parameter.a()] != cpu.register(parameter.b()]) {
+                if (cpu.parameterA().read() != cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 0;
+                    defaultSumToNextInstruction = 2;
                 }
             }
 
@@ -172,9 +171,9 @@ public class InstructionTable {
 
             @Override
             public void execute(final Word parameter) {
-                if (cpu.register(parameter.a()] == cpu.register(parameter.b()]) {
+                if (cpu.parameterA().read() == cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 0;
+                    defaultSumToNextInstruction = 2;
                 }
             }
 
@@ -187,9 +186,9 @@ public class InstructionTable {
 
             @Override
             public void execute(final Word parameter) {
-                if (cpu.register(parameter.a()] < cpu.register(parameter.b()]) {
+                if (cpu.parameterA().read() < cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 0;
+                    defaultSumToNextInstruction = 2;
                 }
             }
 
@@ -202,9 +201,9 @@ public class InstructionTable {
 
             @Override
             public void execute(final Word parameter) {
-                if (cpu.register(parameter.a()] > cpu.register(parameter.b()]) {
+                if ((cpu.parameterA().read() & cpu.parameterB().read()) == 0) {
                     cost++;
-                    defaultSumToNextInstruction = 0;
+                    defaultSumToNextInstruction = 2;
                 }
             }
 
@@ -212,8 +211,8 @@ public class InstructionTable {
             public int cycles() {
                 return 2 + cost;
             }
-        };*/
+        };
 
-        return instruction ;
-}
+        return instruction;
+    }
 }
