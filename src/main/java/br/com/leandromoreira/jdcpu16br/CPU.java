@@ -46,7 +46,6 @@ public class CPU {
 
             @Override
             public void write(final int value) {
-                throw new UnsupportedOperationException(OpCodes.toString(index) + " had tried to write(" + value + ")");
             }
 
             @Override
