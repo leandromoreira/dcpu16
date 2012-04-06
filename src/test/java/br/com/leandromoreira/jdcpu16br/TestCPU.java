@@ -30,14 +30,14 @@ public class TestCPU {
         cpu.step();
         assertThat(cpu.register(A), is(cpu.register(B)));
     }
-    
-        @Test
+
+    @Test
     public void it_performs_set_a_to_indirect_registers() {
-        cpu.setRegister(A, 0xF);
-        cpu.setRegister(B, 0xA);
-        cpu.writeAtRAM(0x0000, 0b000001_000000_0001);
+        cpu.setRegister(A, 0x5);
+        cpu.writeAtRAM(0x0005, 0x4);
+        cpu.writeAtRAM(0x0000, 0b001000_000000_0001);
         cpu.step();
-        assertThat(cpu.register(A), is(cpu.register(B)));
+        assertThat(cpu.register(A), is(0x4));
     }
 
     @Test

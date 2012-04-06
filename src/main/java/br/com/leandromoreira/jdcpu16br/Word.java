@@ -29,4 +29,10 @@ public class Word {
     public int instruction() {
         return instruction;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" + "code=" + code + ", a=" + a + ", b=" + b + ", instruction=" + instruction + '}';
+    }
+    
 }

@@ -166,12 +166,12 @@ public class CPU {
 
                 @Override
                 public void write(int value) {
-                    writeAtRAM(register[index], value);
+                    writeAtRAM(register[index - 0x8], value);
                 }
 
                 @Override
                 public int read() {
-                    return readFromRAM(register[index]);
+                    return readFromRAM(register[index - 0x8]);
                 }
             };
         }

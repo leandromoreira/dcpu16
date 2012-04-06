@@ -11,4 +11,9 @@ public abstract class ParameterDecoder {
     public abstract void write(final int value);
 
     public abstract int read();
+
+    @Override
+    public String toString() {
+        return "ParameterDecoder{ 0x" + Integer.toHexString(index).toUpperCase() + " }";
+    }
 }
