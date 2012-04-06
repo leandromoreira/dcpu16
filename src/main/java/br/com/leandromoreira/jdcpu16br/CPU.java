@@ -1,7 +1,5 @@
 package br.com.leandromoreira.jdcpu16br;
 
-import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
-
 public class CPU {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
@@ -19,421 +17,88 @@ public class CPU {
     public static final int Z = 0x5;
     public static final int I = 0x6;
     public static final int J = 0x7;
-    private static final int POP = 0x18;
-    private static final int PEEK = 0x19;
-    private static final int PUSH = 0x1A;
-    private static final int SP_DECODER = 0x1B;
-    private static final int PC_DECODER = 0x1C;
-    private static final int O_DECODER = 0x1D;
-    private static final int NEXT_WORD_INDIRECT = 0x1E;
-    private static final int NEXT_WORD = 0x1F;
     private int[] register = new int[0x8];
     private int programCounter, stackPointer;
     private int overflow;
     private Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
-    private ParameterDecoder[] decoder = new ParameterDecoder[NUMBER_OF_DECODERS];
+    private ParameterDecoder[] decoder;
     private Memory memory = new Memory();
+    private ParameterDecoder a, b;
 
     public CPU() {
         programCounter = stackPointer = overflow = 0x0000;
-        fillInstructionTable();
-        fillParameterDecoder();
+        instruction = new InstructionTableBuilder().instructionSet(this);
+        decoder = new ParameterDecoderBuilder(this).all();
+    }
+
+    public ParameterDecoder parameterA() {
+        return a;
+    }
+
+    public ParameterDecoder parameterB() {
+        return b;
     }
 
     public Memory memory() {
         return memory;
     }
 
+    public int getOverflow() {
+        return overflow;
+    }
+
+    public void setOverflow(final int overflow) {
+        this.overflow = overflow;
+    }
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
+
+    public int getNextProgramCounter() {
+        return ++programCounter;
+    }
+
+    public void setProgramCounter(final int programCounter) {
+        this.programCounter = programCounter;
+    }
+
+    public int getStackPointer() {
+        return stackPointer;
+    }
+
+    public int getStackPointerAndIncrement() {
+        final int sp = stackPointer;
+        stackPointer++;
+        return sp;
+    }
+
+    public int getStackPointerAndDecrement() {
+        return --stackPointer;
+    }
+
+    public void setStackPointer(final int stackPointer) {
+        this.stackPointer = stackPointer;
+    }
+
     public int register(final int index) {
         return register[index];
     }
 
-    private void fillParameterDecoder() {
-        fillDecoderDirectRegister();
-        fillDecoderIndirectRegister();
-        fillDecoderIndirectNextWordPlusRegister();
-        fillDecoderLiteral();
-        decoder[POP] = new ParameterDecoder(POP) {
-
-            @Override
-            public void write(final int value) {
-            }
-
-            @Override
-            public int read() {
-                return memory.readFrom(stackPointer++);
-            }
-        };
-        decoder[PEEK] = new ParameterDecoder(PEEK) {
-
-            @Override
-            public void write(final int value) {
-            }
-
-            @Override
-            public int read() {
-                return memory.readFrom(stackPointer);
-            }
-        };
-        decoder[PUSH] = new ParameterDecoder(PUSH) {
-
-            @Override
-            public void write(final int value) {
-            }
-
-            @Override
-            public int read() {
-                return memory.readFrom(--stackPointer);
-            }
-        };
-        decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
-
-            @Override
-            public void write(final int value) {
-                stackPointer = value;
-            }
-
-            @Override
-            public int read() {
-                return stackPointer;
-            }
-        };
-        decoder[PC_DECODER] = new ParameterDecoder(PC_DECODER) {
-
-            @Override
-            public void write(final int value) {
-                programCounter = value;
-            }
-
-            @Override
-            public int read() {
-                return programCounter;
-            }
-        };
-        decoder[O_DECODER] = new ParameterDecoder(O_DECODER) {
-
-            @Override
-            public void write(final int value) {
-                overflow = value;
-            }
-
-            @Override
-            public int read() {
-                return overflow;
-            }
-        };
-        decoder[NEXT_WORD_INDIRECT] = new ParameterDecoder(NEXT_WORD_INDIRECT) {
-
-            @Override
-            public void write(final int value) {
-            }
-
-            @Override
-            public int read() {
-                return memory.readFrom(memory.readFrom(++programCounter));
-            }
-        };
-        decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
-
-            @Override
-            public void write(final int value) {
-            }
-
-            @Override
-            public int read() {
-                return memory.readFrom(++programCounter);
-            }
-        };
-    }
-
-    private void fillDecoderDirectRegister() {
-        for (int registerIndex = A; registerIndex <= J; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
-
-                @Override
-                public void write(int value) {
-                    register[index] = value;
-                }
-
-                @Override
-                public int read() {
-                    return register[index];
-                }
-            };
-        }
-    }
-
-    private void fillDecoderIndirectRegister() {
-        for (int registerIndex = 0x08; registerIndex <= 0x0F; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
-
-                @Override
-                public void write(int value) {
-                    memory.writeAt(register[index - 0x8], value);
-                }
-
-                @Override
-                public int read() {
-                    return memory.readFrom(register[index - 0x8]);
-                }
-            };
-        }
-    }
-
-    private void fillDecoderLiteral() {
-        for (int registerIndex = 0x20; registerIndex <= 0x3F; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
-
-                @Override
-                public void write(int value) {
-                }
-
-                @Override
-                public int read() {
-                    return index - 0x20;
-                }
-            };
-        }
-    }
-
-    private void fillDecoderIndirectNextWordPlusRegister() {
-        for (int registerIndex = 0x10; registerIndex <= 0x17; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
-
-                @Override
-                public void write(int value) {
-                    memory.writeAt(nextWordPlusRegister(), value);
-                }
-
-                @Override
-                public int read() {
-                    return memory.readFrom(nextWordPlusRegister());
-                }
-
-                private int nextWordPlusRegister() {
-                    return memory.readFrom(++programCounter) + register[index];
-                }
-            };
-        }
-    }
-
-    private void fillInstructionTable() {
-        instruction[NOT_BASIC] = new DefaultInstruction() {
-
-            private int cycles = 2;
-
-            @Override
-            public void execute(final Word parameter) {
-                final int syscall = (parameter.instruction() >> 0x4) & 0x6;
-                final int a = (parameter.instruction() >> (0x4 + 0x6));
-                switch (syscall) {
-                    case SYSCALL_JSR:
-                        stackPointer = programCounter + ONE;
-                        programCounter = register[a];
-                        defaultSumToNextInstruction = ZERO;
-                        break;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return cycles + cost;
-            }
-        };
-        instruction[SET] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                final ParameterDecoder a = decoder[parameter.a()];
-                final ParameterDecoder b = decoder[parameter.b()];
-                a.write(b.read());
-            }
-        };
-        instruction[ADD] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] += register[parameter.b()];
-                overflow = ((register[parameter.a()] & MASK_16BIT) > ZERO) ? ONE : ZERO;
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[SUB] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] -= register[parameter.b()];
-                overflow = (register[parameter.a()] < ZERO) ? OxFFFF : ZERO;
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[MUL] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] *= register[parameter.b()];
-                overflow = ((register[parameter.a()] * register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[DIV] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                if (register[parameter.b()] != ZERO) {
-                    register[parameter.a()] /= register[parameter.b()];
-                    overflow = ((register[parameter.a()] << WORD_SIZE) / register[parameter.b()]) & OxFFFF;
-                } else {
-                    overflow = ZERO;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return 3 + cost;
-            }
-        };
-        instruction[MOD] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] = (register[parameter.b()] == ZERO) ? ZERO : register[parameter.a()] % register[parameter.b()];
-            }
-
-            @Override
-            public int cycles() {
-                return 3 + cost;
-            }
-        };
-        instruction[SHL] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] <<= register[parameter.b()];
-                overflow = ((register[parameter.a()] << register[parameter.b()]) >> WORD_SIZE) & OxFFFF;
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[SHR] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] >>= register[parameter.b()];
-                overflow = ((register[parameter.a()] << WORD_SIZE) >> register[parameter.b()]) & OxFFFF;
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[AND] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] &= register[parameter.b()];
-            }
-        };
-        instruction[BOR] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] |= register[parameter.b()];
-            }
-        };
-        instruction[XOR] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                register[parameter.a()] ^= register[parameter.b()];
-            }
-        };
-        instruction[IFE] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                if (register[parameter.a()] != register[parameter.b()]) {
-                    cost++;
-                    defaultSumToNextInstruction = 0;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[IFN] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                if (register[parameter.a()] == register[parameter.b()]) {
-                    cost++;
-                    defaultSumToNextInstruction = 0;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[IFG] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                if (register[parameter.a()] < register[parameter.b()]) {
-                    cost++;
-                    defaultSumToNextInstruction = 0;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
-        instruction[IFB] = new DefaultInstruction() {
-
-            @Override
-            public void execute(final Word parameter) {
-                if (register[parameter.a()] > register[parameter.b()]) {
-                    cost++;
-                    defaultSumToNextInstruction = 0;
-                }
-            }
-
-            @Override
-            public int cycles() {
-                return 2 + cost;
-            }
-        };
+    public void setRegister(final int index, final int value) {
+        register[index] = value;
     }
 
     public void step() {
         final Word word = new Word(memory.readFrom(programCounter));
         final Instruction currentInstruction = instruction[word.code()];
+        decodeValuesParameter(word);
         currentInstruction.execute(word);
         programCounter += currentInstruction.sumToPC();
     }
 
-    public void setRegister(final int index, final int value) {
-        register[index] = value;
+    private void decodeValuesParameter(final Word parameter) {
+        a = decoder[parameter.a()];
+        b = decoder[parameter.b()];
     }
 }
