@@ -91,19 +91,20 @@ public class InstructionTable {
             public int cycles() {
                 return 3 + cost;
             }
-        };/*
+        };
         instruction[MOD] = new DefaultInstruction() {
 
             @Override
             public void execute(final Word parameter) {
-                cpu.register(parameter.a()] = (cpu.register(parameter.b()] == ZERO) ? ZERO : cpu.register(parameter.a()] % cpu.register(parameter.b()];
+                final int mod = (cpu.parameterB().read() == 0) ? ZERO : cpu.parameterA().read() % cpu.parameterB().read();
+                cpu.parameterA().write(mod);
             }
 
             @Override
             public int cycles() {
                 return 3 + cost;
             }
-        };
+        };/*
         instruction[SHL] = new DefaultInstruction() {
 
             @Override
