@@ -45,7 +45,7 @@ public class CPU {
 
             @Override
             public void write(final int value) {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(OpCodes.toString(index)+" had tried to write("+value+")");
             }
 
             @Override
@@ -315,18 +315,5 @@ public class CPU {
 
     public void setRegister(final int index, final int value) {
         register[index] = value;
-    }
-
-    private abstract class ParameterDecoder {
-
-        protected final int index;
-
-        public ParameterDecoder(final int index) {
-            this.index = index;
-        }
-
-        public abstract void write(final int value);
-
-        public abstract int read();
     }
 }

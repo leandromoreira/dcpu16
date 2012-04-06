@@ -21,15 +21,25 @@ public class TestCPU {
         cpu.writeAtRAM(0x0000, 0x7C01);
         assertThat(cpu.readFromRAM(0x0000), is(0x7C01));
     }
+
     @Test
-    public void it_performs_set_a_to_registers() {
-        cpu.setRegister(A,0xF);
-        cpu.setRegister(B,0xA);
+    public void it_performs_set_a_to_direct_registers() {
+        cpu.setRegister(A, 0xF);
+        cpu.setRegister(B, 0xA);
         cpu.writeAtRAM(0x0000, 0b000001_000000_0001);
         cpu.step();
         assertThat(cpu.register(A), is(cpu.register(B)));
     }
     
+        @Test
+    public void it_performs_set_a_to_indirect_registers() {
+        cpu.setRegister(A, 0xF);
+        cpu.setRegister(B, 0xA);
+        cpu.writeAtRAM(0x0000, 0b000001_000000_0001);
+        cpu.step();
+        assertThat(cpu.register(A), is(cpu.register(B)));
+    }
+
     @Test
     public void it_performs_set_a_to_next_word() {
         cpu.writeAtRAM(0x0000, 0x7C01);
