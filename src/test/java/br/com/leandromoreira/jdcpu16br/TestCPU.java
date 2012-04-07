@@ -314,5 +314,8 @@ public class TestCPU {
         for (int steps = 0; steps < 5; steps++) {
             cpu.step();
         }
+        assertThat(cpu.register(A), is(0x10));
+        assertThat(cpu.register(I), is(10));
+        assertThat(memory.readFrom(0x1000), is(0x20));
     }
 }
