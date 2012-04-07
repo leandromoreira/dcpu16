@@ -322,6 +322,21 @@ public class TestCPU {
     @Test
     public void it_runs_loopy_code(){
         int address = 0x0000;
+        memory.writeAt(address++, 0x7C01);
+        memory.writeAt(address++, 0x0030);
+        
+        memory.writeAt(address++, 0x7DE1);
+        memory.writeAt(address++, 0x1000);
+        memory.writeAt(address++, 0x0020);
+        
+        memory.writeAt(address++, 0x7803);
+        memory.writeAt(address++, 0x1000);
+        
+        memory.writeAt(address++, 0xC00D);
+        
+        memory.writeAt(address++, 0x7DC1);
+        memory.writeAt(address++, 0x001A);
+        
         memory.writeAt(address++, 0xA861);
         
         memory.writeAt(address++, 0x7C01);
@@ -336,16 +351,8 @@ public class TestCPU {
      
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x000D);
-        for (int steps = 0; steps < 7; steps++) {
+        for (int steps = 0; steps < 15; steps++) {
             cpu.step();
         }
-       /* 
-            ; Do a loopy thing
-                      SET I, 10                ; 
-                      SET A, 0x2000            ; -b-001000-a-010110-op-0001 10000000000000 
-        :loop         SET [0x2000+I], [A]      ; 0x2161  0x2000
-                      SUB I, 1                 ; 
-                      IFN I, 0                 ; 
-                         SET PC, loop          ;   [*]*/
     }
 }

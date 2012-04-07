@@ -89,6 +89,7 @@ public class CPU {
     }
 
     public void step() {
+        final int currentProgramCounter = programCounter;
         currentWord = new Word(memory.readFrom(programCounter));
         a = decoderFor(currentWord.a());
         b = decoderFor(currentWord.b());
@@ -98,7 +99,7 @@ public class CPU {
 
         instruction.execute();
 
-        System.out.println(String.format("%s %s, %s", currentWord, a, b));
+        System.out.println(String.format("%s: %s %s, %s", toHexa4Spaces(currentProgramCounter), currentWord, a, b));
 
         programCounter += sumToPC(instruction);
     }
@@ -109,5 +110,14 @@ public class CPU {
 
     public ParameterDecoder decoderFor(final int value) {
         return decoders[value];
+    }
+
+    public String toHexa4Spaces(final int programCounter) {
+        final StringBuilder sb = new StringBuilder("0x");
+        final String address = Integer.toHexString(programCounter).toUpperCase();
+        for (int i = address.length(); i < 4; i++) {
+            sb.append("0");
+        }
+        return sb.append(address).toString();
     }
 }
