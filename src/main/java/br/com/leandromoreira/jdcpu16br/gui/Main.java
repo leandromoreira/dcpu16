@@ -5,6 +5,7 @@
 package br.com.leandromoreira.jdcpu16br.gui;
 
 import br.com.leandromoreira.jdcpu16br.CPU;
+import br.com.leandromoreira.jdcpu16br.HexaFormatter;
 import br.com.leandromoreira.jdcpu16br.Memory;
 
 /**
@@ -18,6 +19,7 @@ public class Main extends javax.swing.JFrame {
      */
     private final CPU cpu;
     private final Memory memory;
+
     public Main() {
         initComponents();
         cpu = new CPU();
@@ -325,14 +327,23 @@ public class Main extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
         jTxtAreaMemory.setText("0x0000: 0x7C01 0x7C01 0x7C01 0x7C01");
-        
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jBtnLoadDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadDumpActionPerformed
-        
-        final String rawText = jTxtAreaDump.getText().replace("\n", "").replace("\r","");
+
+        final String rawText = jTxtAreaDump.getText().replace("\n", "").replace("\r", "");
         final String[] hexadecimalCells = rawText.split(" ");
         memory.load(hexadecimalCells);
+        jTxtAreaMemory.setText("");
+
+        final HexaFormatter formatter = new HexaFormatter();
+        final StringBuilder sb = new StringBuilder();
+        for (int address = 0x0000; address < memory.getMaximumFilled();) {
+            sb.append("\n").append(formatter.toHexa4Spaces(memory.readFrom(address++)));
+        }
+        sb.deleteCharAt(0);
+        jTxtAreaMemory.setText(sb.toString());
     }//GEN-LAST:event_jBtnLoadDumpActionPerformed
 
     /**

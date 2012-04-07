@@ -22,14 +22,14 @@ public class MemoryTest {
 
     @Test
     public void it_is_empty_when_nothing_is_loaded() {
-        assertThat(memory.isEmpty(), is(true));
+        assertThat(memory.getMaximumFilled(), is(0));
     }
 
     @Test
     public void it_load_memory_from_hexa_string_array() {
         final String[] cells = new String[]{"003A"};
         memory.load(cells);
-        assertThat(memory.isEmpty(), is(false));
+        assertThat(memory.getMaximumFilled(), is(1));
         assertThat(memory.readFrom(0x0000), is(0x003A));
     }
 
@@ -38,15 +38,15 @@ public class MemoryTest {
         final String[] emptyCell = new String[]{};
         final String[] nullCell = null;
         memory.load(emptyCell);
-        assertThat(memory.isEmpty(), is(true));
+        assertThat(memory.getMaximumFilled(), is(0));
         memory.load(nullCell);
-        assertThat(memory.isEmpty(), is(true));
+        assertThat(memory.getMaximumFilled(), is(0));
     }
 
     @Test
     public void it_ignores_empty_or_null_item_of_array() {
         final String[] emptyCell = new String[]{null, ""};
         memory.load(emptyCell);
-        assertThat(memory.isEmpty(), is(true));
+        assertThat(memory.getMaximumFilled(), is(0));
     }
 }

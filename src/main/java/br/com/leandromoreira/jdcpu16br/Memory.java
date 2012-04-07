@@ -15,15 +15,13 @@ public class Memory {
     }
 
     private void clear() {
-        if (!isEmpty()) {
-            for (int address = 0x0000; address < MEMORY_SIZE; address++) {
-                memory[address] = 0x0000;
-            }
+        for (int address = 0x0000; address < MEMORY_SIZE; address++) {
+            memory[address] = 0x0000;
         }
     }
 
-    public boolean isEmpty() {
-        return maximumFilled == 0;
+    public int getMaximumFilled() {
+        return maximumFilled;
     }
 
     public void load(String[] hexadecimalCells) {
