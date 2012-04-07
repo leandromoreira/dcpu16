@@ -29,6 +29,6 @@ public abstract class ParameterDecoder {
 
     @Override
     public String toString() {
-        return type() + " { 0x" + Integer.toHexString(index).toUpperCase() + " }";
+        return type();
     }
 }

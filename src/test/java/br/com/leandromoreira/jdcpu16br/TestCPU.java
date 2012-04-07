@@ -276,7 +276,7 @@ public class TestCPU {
         cpu.step();
         assertThat(cpu.getProgramCounter(), is(cpu.register(A)));
     }
-    
+
     @Test
     public void it_runs_properly_instructions_with_different_sizes() {
         int address = 0x0000;
@@ -289,5 +289,30 @@ public class TestCPU {
         cpu.step();
         cpu.step();
         assertThat(memory.readFrom(0x1000), is(0x20));
+    }
+
+    @Test
+    public void it_runs_properly_basic_stuff() {
+        int address = 0x0000;
+        memory.writeAt(address++, 0x7C01);
+        memory.writeAt(address++, 0x0030);
+        
+        memory.writeAt(address++, 0x7DE1);
+        memory.writeAt(address++, 0x1000);
+        memory.writeAt(address++, 0x0020);
+        
+        memory.writeAt(address++, 0x7803);
+        memory.writeAt(address++, 0x1000);
+        
+        memory.writeAt(address++, 0xC00D);
+        
+        memory.writeAt(address++, 0x7DC1);
+        memory.writeAt(address++, 0x001A);
+        
+        memory.writeAt(address++, 0xA861);
+        
+        for (int steps = 0; steps < 5; steps++) {
+            cpu.step();
+        }
     }
 }

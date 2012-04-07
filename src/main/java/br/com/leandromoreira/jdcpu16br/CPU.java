@@ -26,6 +26,10 @@ public class CPU {
         decoders = new AllParametersDecoder(this).all();
     }
 
+    public Instruction[] getInstructions() {
+        return instructions;
+    }
+
     public Word getCurrentWord() {
         return currentWord;
     }

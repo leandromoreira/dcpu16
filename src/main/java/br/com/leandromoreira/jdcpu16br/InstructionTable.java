@@ -6,8 +6,10 @@ public class InstructionTable {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
+    private CPU cpu;
 
     public Instruction[] instructionSet(final CPU cpu) {
+        this.cpu = cpu;
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
 
         instruction[NOT_BASIC] = new DefaultInstruction() {
@@ -166,7 +168,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 2;
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
                 }
             }
 
@@ -181,7 +183,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 2;
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
                 }
             }
 
@@ -196,7 +198,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction = 2;
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
                 }
             }
 
@@ -211,7 +213,7 @@ public class InstructionTable {
             public void execute() {
                 if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
                     cost++;
-                    defaultSumToNextInstruction = 2;
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
                 }
             }
 
@@ -223,4 +225,13 @@ public class InstructionTable {
 
         return instruction;
     }
+    
+    public int nextInstructionSize(final int newProgramCounter) {
+        final Word currentWord = new Word(cpu.memory().readFrom(newProgramCounter));
+        final ParameterDecoder a = cpu.decoderFor(currentWord.a());
+        final ParameterDecoder b = cpu.decoderFor(currentWord.b());
+        final Instruction instruction = cpu.getInstructions()[currentWord.code()];
+        return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
+    }
+
 }

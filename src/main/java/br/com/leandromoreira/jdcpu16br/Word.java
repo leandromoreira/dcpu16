@@ -32,6 +32,6 @@ public class Word {
 
     @Override
     public String toString() {
-        return "Word{" + OpCodes.toString(code) + " , a=" + a + ", b=" + b + ", instruction=" + instruction + '}';
+        return OpCodes.toString(code);
     }
 }
