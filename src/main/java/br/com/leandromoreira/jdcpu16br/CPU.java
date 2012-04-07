@@ -92,10 +92,16 @@ public class CPU {
         currentWord = new Word(memory.readFrom(programCounter));
         a = decoderFor(currentWord.a());
         b = decoderFor(currentWord.b());
+        a.setMyProgramCounter(programCounter);
+        b.setMyProgramCounter(programCounter + a.size());
         final Instruction instruction = instructions[currentWord.code()];
-        
+
         instruction.execute();
-        programCounter += instruction.sumToPC();
+        programCounter += sumToPC(instruction);
+    }
+
+    private int sumToPC(final Instruction instruction) {
+        return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
     }
 
     public ParameterDecoder decoderFor(final int value) {

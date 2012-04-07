@@ -33,6 +33,11 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.memory().readFrom(cpu.getStackPointerAndIncrement());
             }
+
+            @Override
+            public String type() {
+                return "POP";
+            }
         };
         decoder[PEEK] = new ParameterDecoder(PEEK) {
 
@@ -44,6 +49,11 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.memory().readFrom(cpu.getStackPointer());
             }
+
+            @Override
+            public String type() {
+                return "PEEK";
+            }
         };
         decoder[PUSH] = new ParameterDecoder(PUSH) {
 
@@ -54,6 +64,11 @@ public class AllParametersDecoder {
             @Override
             public int read() {
                 return cpu.memory().readFrom(cpu.getStackPointerAndDecrement());
+            }
+
+            @Override
+            public String type() {
+                return "PUSH";
             }
         };
         decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
@@ -67,6 +82,11 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.getStackPointer();
             }
+
+            @Override
+            public String type() {
+                return "SP";
+            }
         };
         decoder[PC_DECODER] = new ParameterDecoder(PC_DECODER) {
 
@@ -78,6 +98,11 @@ public class AllParametersDecoder {
             @Override
             public int read() {
                 return cpu.getProgramCounter();
+            }
+
+            @Override
+            public String type() {
+                return "PC";
             }
         };
         decoder[O_DECODER] = new ParameterDecoder(O_DECODER) {
@@ -91,16 +116,32 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.getOverflow();
             }
+
+            @Override
+            public String type() {
+                return "O";
+            }
         };
         decoder[NEXT_WORD_INDIRECT] = new ParameterDecoder(NEXT_WORD_INDIRECT) {
 
             @Override
             public void write(final int value) {
+                cpu.memory().writeAt(cpu.memory().readFrom(getMyProgramCounter()+1), value);
             }
 
             @Override
             public int read() {
-                return cpu.memory().readFrom(cpu.memory().readFrom(cpu.getNextProgramCounter()));
+                return cpu.memory().readFrom(cpu.memory().readFrom(getMyProgramCounter()+1));
+            }
+
+            @Override
+            public int size() {
+                return 1;
+            }
+
+            @Override
+            public String type() {
+                return "NEXT_WORD_INDIRECT";
             }
         };
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
@@ -111,7 +152,17 @@ public class AllParametersDecoder {
 
             @Override
             public int read() {
-                return cpu.memory().readFrom(cpu.getNextProgramCounter());
+                return cpu.memory().readFrom(getMyProgramCounter()+1);
+            }
+
+            @Override
+            public int size() {
+                return 1;
+            }
+            
+            @Override
+            public String type() {
+                return "NEXT_WORD";
             }
         };
         return decoder;
@@ -130,6 +181,11 @@ public class AllParametersDecoder {
                 public int read() {
                     return cpu.register(index);
                 }
+
+                @Override
+                public String type() {
+                    return "DIRECT_REGISTER";
+                }
             };
         }
     }
@@ -147,6 +203,11 @@ public class AllParametersDecoder {
                 public int read() {
                     return cpu.memory().readFrom(cpu.register(index - 0x8));
                 }
+
+                @Override
+                public String type() {
+                    return "INDIRECT_REGISTER";
+                }
             };
         }
     }
@@ -162,6 +223,11 @@ public class AllParametersDecoder {
                 @Override
                 public int read() {
                     return index - 0x20;
+                }
+
+                @Override
+                public String type() {
+                    return "LITERAL";
                 }
             };
         }
@@ -183,6 +249,16 @@ public class AllParametersDecoder {
 
                 private int nextWordPlusRegister() {
                     return cpu.memory().readFrom(cpu.getNextProgramCounter()) + cpu.register(index);
+                }
+
+                @Override
+                public int size() {
+                    return 1;
+                }
+
+                @Override
+                public String type() {
+                    return "INDIRECT_NEXT_WORD_PLUS_REGISTER";
                 }
             };
         }
