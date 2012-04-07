@@ -282,7 +282,6 @@ public class TestCPU {
         int address = 0x0000;
         memory.writeAt(address++, 0x7C01);
         memory.writeAt(address++, 0x0030);
-        //b-011111-a-011110-op-0001
         memory.writeAt(address++, 0x7DE1);
         memory.writeAt(address++, 0x1000);
         memory.writeAt(address++, 0x0020);
