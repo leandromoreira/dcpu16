@@ -318,4 +318,34 @@ public class TestCPU {
         assertThat(cpu.register(I), is(10));
         assertThat(memory.readFrom(0x1000), is(0x20));
     }
+    
+    @Test
+    public void it_runs_loopy_code(){
+        int address = 0x0000;
+        memory.writeAt(address++, 0xA861);
+        
+        memory.writeAt(address++, 0x7C01);
+        memory.writeAt(address++, 0x2000);
+        
+        memory.writeAt(address++, 0x2161);
+        memory.writeAt(address++, 0x2000);
+        
+        memory.writeAt(address++, 0x8463);
+        
+        memory.writeAt(address++, 0x806D);
+     
+        memory.writeAt(address++, 0x7DC1);
+        memory.writeAt(address++, 0x000D);
+        for (int steps = 0; steps < 7; steps++) {
+            cpu.step();
+        }
+       /* 
+            ; Do a loopy thing
+                      SET I, 10                ; 
+                      SET A, 0x2000            ; -b-001000-a-010110-op-0001 10000000000000 
+        :loop         SET [0x2000+I], [A]      ; 0x2161  0x2000
+                      SUB I, 1                 ; 
+                      IFN I, 0                 ; 
+                         SET PC, loop          ;   [*]*/
+    }
 }

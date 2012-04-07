@@ -23,7 +23,7 @@ public class InstructionTable {
                 final ParameterDecoder aDecoded = cpu.decoderFor(a);
                 switch (syscall) {
                     case SYSCALL_JSR:
-                        cpu.setStackPointer(cpu.getNextProgramCounter());
+                        cpu.setStackPointer(cpu.getProgramCounter() + 1);
                         cpu.setProgramCounter(aDecoded.read());
                         defaultSumToNextInstruction = ZERO;
                         break;
@@ -168,7 +168,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
@@ -183,7 +183,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
@@ -198,7 +198,7 @@ public class InstructionTable {
             public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
                     cost++;
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
@@ -213,7 +213,7 @@ public class InstructionTable {
             public void execute() {
                 if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
                     cost++;
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter()+1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
@@ -225,7 +225,7 @@ public class InstructionTable {
 
         return instruction;
     }
-    
+
     public int nextInstructionSize(final int newProgramCounter) {
         final Word currentWord = new Word(cpu.memory().readFrom(newProgramCounter));
         final ParameterDecoder a = cpu.decoderFor(currentWord.a());
@@ -233,5 +233,4 @@ public class InstructionTable {
         final Instruction instruction = cpu.getInstructions()[currentWord.code()];
         return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
     }
-
 }

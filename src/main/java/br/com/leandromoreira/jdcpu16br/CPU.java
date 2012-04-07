@@ -58,10 +58,6 @@ public class CPU {
         return programCounter;
     }
 
-    public int getNextProgramCounter() {
-        return ++programCounter;
-    }
-
     public void setProgramCounter(final int programCounter) {
         this.programCounter = programCounter;
     }
@@ -101,6 +97,9 @@ public class CPU {
         final Instruction instruction = instructions[currentWord.code()];
 
         instruction.execute();
+
+        System.out.println(String.format("%s %s, %s", currentWord, a, b));
+
         programCounter += sumToPC(instruction);
     }
 

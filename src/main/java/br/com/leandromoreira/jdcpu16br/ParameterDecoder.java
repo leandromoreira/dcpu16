@@ -3,6 +3,7 @@ package br.com.leandromoreira.jdcpu16br;
 public abstract class ParameterDecoder {
 
     protected final int index;
+    protected String representation;
     private int myProgramCounter;
 
     public ParameterDecoder(final int index) {
@@ -23,12 +24,10 @@ public abstract class ParameterDecoder {
 
     public abstract void write(final int value);
 
-    public abstract String type();
-
     public abstract int read();
 
     @Override
     public String toString() {
-        return type();
+        return representation;
     }
 }
