@@ -99,7 +99,7 @@ public class CPU {
 
         instruction.execute();
 
-        System.out.println(String.format("%s: %s %s, %s", toHexa4Spaces(currentProgramCounter), currentWord, a, b));
+        System.out.println(String.format("%s: %s %s, %s", new HexaFormatter().toHexa4Spaces(currentProgramCounter), currentWord, a, b));
 
         programCounter += sumToPC(instruction);
     }
@@ -112,12 +112,5 @@ public class CPU {
         return decoders[value];
     }
 
-    public String toHexa4Spaces(final int programCounter) {
-        final StringBuilder sb = new StringBuilder("0x");
-        final String address = Integer.toHexString(programCounter).toUpperCase();
-        for (int i = address.length(); i < 4; i++) {
-            sb.append("0");
-        }
-        return sb.append(address).toString();
-    }
+
 }
