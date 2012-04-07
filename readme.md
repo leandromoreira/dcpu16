@@ -1,5 +1,7 @@
 #JDCPU16BR - Yet another DCPU16 VM/Debugger Java implementation
 
+You can read my view of specs on [documentation](https://github.com/leandromoreira/dcpu16/wiki/Documentation).
+
 ##Resources
 
 *[Original specs to dcpu-16 vitual machine](http://0x10c.com/doc/dcpu-16.txt)*
