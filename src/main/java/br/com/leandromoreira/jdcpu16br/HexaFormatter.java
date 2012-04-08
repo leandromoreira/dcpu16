@@ -21,4 +21,17 @@ public class HexaFormatter {
     public String toHexadecimal(final int value) {
         return toHexadecimalFormatted(value, 1);
     }
+
+    public boolean isValidHexadecimal(final String value) {
+        if (value != null && !"".equals(value.trim())) {
+            try {
+                Integer.valueOf(value.replace("x", ""), 16);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

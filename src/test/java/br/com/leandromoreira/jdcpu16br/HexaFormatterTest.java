@@ -17,4 +17,13 @@ public class HexaFormatterTest {
         final HexaFormatter formatter = new HexaFormatter();
         assertThat(formatter.toHexadecimal(10), is("0xA"));
     }
+
+    @Test
+    public void it_reject_not_hexadecimal_number() {
+        final HexaFormatter formatter = new HexaFormatter();
+        assertThat(formatter.isValidHexadecimal(""), is(false));
+        assertThat(formatter.isValidHexadecimal(null), is(false));
+        assertThat(formatter.isValidHexadecimal("afaf,G"), is(false));
+        assertThat(formatter.isValidHexadecimal("TTG"), is(false));
+    }
 }
