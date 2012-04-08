@@ -18,18 +18,38 @@ public class TestCPU {
     }
 
     @Test
-    public void it_returns_stack_and_increment_itself(){
+    public void it_raises_overflow_but_dont_sum_up() {
+        cpu.setRegister(A, 0xFFFF);
+        cpu.setRegister(B, 0x1);
+        memory.writeAt(0x0000, 0b000001_000000_0010);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0x0001));
+        assertThat(cpu.register(A), is(0x0000));
+    }
+
+    @Test
+    public void it_raises_underflow_but_dont_sum_up() {
+        cpu.setRegister(A, 0x1);
+        cpu.setRegister(B, 0x2);
+        memory.writeAt(0x0000, 0b000001_000000_0011);
+        cpu.step();
+        assertThat(cpu.getOverflow(), is(0xFFFF));
+        assertThat(cpu.register(A), is(0xFFFF));
+    }
+
+    @Test
+    public void it_returns_stack_and_increment_itself() {
         cpu.setStackPointer(0x0002);
         assertThat(cpu.popStackPointer(), is(0x0002));
         assertThat(cpu.getStackPointer(), is(0x0003));
     }
-    
-        @Test
-    public void it_returns_drecremented_stack_pointer(){
+
+    @Test
+    public void it_returns_drecremented_stack_pointer() {
         cpu.setStackPointer(0x0002);
         assertThat(cpu.pushStackPointer(), is(0x0001));
     }
-    
+
     @Test
     public void it_performs_set_a_to_direct_registers() {
         cpu.setRegister(A, 0xF);
@@ -309,21 +329,21 @@ public class TestCPU {
         int address = 0x0000;
         memory.writeAt(address++, 0x7C01);
         memory.writeAt(address++, 0x0030);
-        
+
         memory.writeAt(address++, 0x7DE1);
         memory.writeAt(address++, 0x1000);
         memory.writeAt(address++, 0x0020);
-        
+
         memory.writeAt(address++, 0x7803);
         memory.writeAt(address++, 0x1000);
-        
+
         memory.writeAt(address++, 0xC00D);
-        
+
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x001A);
-        
+
         memory.writeAt(address++, 0xA861);
-        
+
         for (int steps = 0; steps < 5; steps++) {
             cpu.step();
         }
@@ -331,37 +351,37 @@ public class TestCPU {
         assertThat(cpu.register(I), is(10));
         assertThat(memory.readFrom(0x1000), is(0x20));
     }
-    
+
     @Test
-    public void it_runs_loopy_code(){
+    public void it_runs_loopy_code() {
         int address = 0x0000;
         memory.writeAt(address++, 0x7C01);
         memory.writeAt(address++, 0x0030);
-        
+
         memory.writeAt(address++, 0x7DE1);
         memory.writeAt(address++, 0x1000);
         memory.writeAt(address++, 0x0020);
-        
+
         memory.writeAt(address++, 0x7803);
         memory.writeAt(address++, 0x1000);
-        
+
         memory.writeAt(address++, 0xC00D);
-        
+
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x001A);
-        
+
         memory.writeAt(address++, 0xA861);
-        
+
         memory.writeAt(address++, 0x7C01);
         memory.writeAt(address++, 0x2000);
-        
+
         memory.writeAt(address++, 0x2161);
         memory.writeAt(address++, 0x2000);
-        
+
         memory.writeAt(address++, 0x8463);
-        
+
         memory.writeAt(address++, 0x806D);
-     
+
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x000D);
         for (int steps = 0; steps < 15; steps++) {

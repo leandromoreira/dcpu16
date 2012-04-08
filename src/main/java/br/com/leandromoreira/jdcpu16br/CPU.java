@@ -104,20 +104,25 @@ public class CPU {
     public String step() {
         final int currentProgramCounter = programCounter;
         currentWord = new Word(memory.readFrom(programCounter));
-        a = decoderFor(currentWord.a());
-        b = decoderFor(currentWord.b());
-        a.setMyProgramCounter(programCounter);
-        b.setMyProgramCounter(programCounter + a.size());
         currentInstruction = instructions[currentWord.code()];
+
+        decodeParameters();
 
         currentInstruction.execute();
         programCounter += sumToPC(currentInstruction);
 
-        currentCycleCost = currentInstruction.cycles() + a.extraCycles() + b.extraCycles();
         return assemblerFor(currentProgramCounter);
     }
 
+    private void decodeParameters() {
+        a = decoderFor(currentWord.a());
+        b = decoderFor(currentWord.b());
+        a.setMyProgramCounter(programCounter);
+        b.setMyProgramCounter(programCounter + a.size());
+    }
+
     private String assemblerFor(final int currentProgramCounter) {
+        currentCycleCost = currentInstruction.cycles() + a.extraCycles() + b.extraCycles();
         if (currentWord.code() != OpCodes.NOT_BASIC) {
             return String.format("%s: %s %s, %s", formatter.toHexa4Spaces(currentProgramCounter), currentWord, a, b);
         } else {
