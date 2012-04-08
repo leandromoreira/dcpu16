@@ -7,10 +7,8 @@ public class InstructionTable {
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
     private static final HexaFormatter formatter = new HexaFormatter();
-    private CPU cpu;
 
     public Instruction[] instructionSet(final CPU cpu) {
-        this.cpu = cpu;
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];
 
         instruction[NOT_BASIC] = new DefaultInstruction() {
@@ -193,7 +191,7 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
                     costOfFaling = 0;
@@ -212,7 +210,7 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
                     costOfFaling = 0;
@@ -231,7 +229,7 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
                     costOfFaling = 0;
@@ -250,7 +248,7 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
-                    defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
                     costOfFaling = 0;
@@ -266,7 +264,7 @@ public class InstructionTable {
         return instruction;
     }
 
-    public int nextInstructionSize(final int newProgramCounter) {
+    public int nextInstructionSize(final CPU cpu,final int newProgramCounter) {
         final Word currentWord = new Word(cpu.memory().readFrom(newProgramCounter));
         final ParameterDecoder a = cpu.decoderFor(currentWord.a());
         final ParameterDecoder b = cpu.decoderFor(currentWord.b());

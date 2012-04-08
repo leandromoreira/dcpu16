@@ -8,33 +8,12 @@ import org.junit.Test;
 
 public class TestCPU {
 
-    private CPU cpu;
-    private Memory memory;
+    private final CPU cpu = new CPU();
+    private final Memory memory = cpu.memory();
 
     @Before
     public void setup() {
-        cpu = new CPU();
-        memory = cpu.memory();
-    }
-
-    @Test
-    public void it_raises_overflow_but_dont_sum_up() {
-        cpu.setRegister(A, 0xFFFF);
-        cpu.setRegister(B, 0x1);
-        memory.writeAt(0x0000, 0b000001_000000_0010);
-        cpu.step();
-        assertThat(cpu.getOverflow(), is(0x0001));
-        assertThat(cpu.register(A), is(0x0000));
-    }
-
-    @Test
-    public void it_raises_underflow_but_dont_sum_up() {
-        cpu.setRegister(A, 0x1);
-        cpu.setRegister(B, 0x2);
-        memory.writeAt(0x0000, 0b000001_000000_0011);
-        cpu.step();
-        assertThat(cpu.getOverflow(), is(0xFFFF));
-        assertThat(cpu.register(A), is(0xFFFF));
+        cpu.reset();
     }
 
     @Test
@@ -48,32 +27,6 @@ public class TestCPU {
     public void it_returns_drecremented_stack_pointer() {
         cpu.setStackPointer(0x0002);
         assertThat(cpu.pushStackPointer(), is(0x0001));
-    }
-
-    @Test
-    public void it_performs_set_a_to_direct_registers() {
-        cpu.setRegister(A, 0xF);
-        cpu.setRegister(B, 0xA);
-        memory.writeAt(0x0000, 0b000001_000000_0001);
-        cpu.step();
-        assertThat(cpu.register(A), is(cpu.register(B)));
-    }
-
-    @Test
-    public void it_performs_set_a_to_indirect_registers() {
-        cpu.setRegister(A, 0x0005);
-        memory.writeAt(0x0005, 0x4);
-        memory.writeAt(0x0000, 0b001000_000000_0001);
-        cpu.step();
-        assertThat(cpu.register(A), is(0x4));
-    }
-
-    @Test
-    public void it_performs_set_a_to_next_word() {
-        memory.writeAt(0x0000, 0x7C01);
-        memory.writeAt(0x0001, 0x0030);
-        cpu.step();
-        assertThat(cpu.register(A), is(0x0030));
     }
 
     @Test
