@@ -1,16 +1,24 @@
 package br.com.leandromoreira.jdcpu16br;
 
 public class HexaFormatter {
+
     public static final String INFIX = "0";
     public static final String PREFIX = "0x";
-    public static final int SIZE_OF_HEXA = 4;
 
     public String toHexa4Spaces(final int word) {
+        return toHexadecimalFormatted(word, 4);
+    }
+
+    private String toHexadecimalFormatted(final int value, final int size) {
         final StringBuilder sb = new StringBuilder(PREFIX);
-        final String address = Integer.toHexString(word).toUpperCase();
-        for (int i = address.length(); i < SIZE_OF_HEXA; i++) {
+        final String address = Integer.toHexString(value).toUpperCase();
+        for (int i = address.length(); i < size; i++) {
             sb.append(INFIX);
         }
         return sb.append(address).toString();
+    }
+
+    public String toHexadecimal(final int value) {
+        return toHexadecimalFormatted(value, 1);
     }
 }

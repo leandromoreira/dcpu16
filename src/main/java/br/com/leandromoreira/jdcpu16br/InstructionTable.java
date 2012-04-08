@@ -6,6 +6,7 @@ public class InstructionTable {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
+    private static final HexaFormatter formatter = new HexaFormatter();
     private CPU cpu;
 
     public Instruction[] instructionSet(final CPU cpu) {
@@ -15,6 +16,7 @@ public class InstructionTable {
         instruction[NOT_BASIC] = new DefaultInstruction() {
 
             private int cycles = 2;
+            private String assembler = "";
 
             @Override
             public void execute() {
@@ -23,8 +25,10 @@ public class InstructionTable {
                 final ParameterDecoder aDecoded = cpu.decoderFor(a);
                 switch (syscall) {
                     case SYSCALL_JSR:
+                        final int newPC = aDecoded.read();
+                        assembler = "JSR " + formatter.toHexadecimal(newPC);
                         cpu.setStackPointer(cpu.getProgramCounter() + 1);
-                        cpu.setProgramCounter(aDecoded.read());
+                        cpu.setProgramCounter(newPC);
                         defaultSumToNextInstruction = ZERO;
                         break;
                 }
@@ -33,6 +37,11 @@ public class InstructionTable {
             @Override
             public int cycles() {
                 return cycles + cost;
+            }
+
+            @Override
+            public String toString() {
+                return assembler;
             }
         };
         instruction[SET] = new DefaultInstruction() {

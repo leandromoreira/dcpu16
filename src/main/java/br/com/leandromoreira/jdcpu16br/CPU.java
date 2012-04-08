@@ -19,6 +19,7 @@ public class CPU {
     private final Memory memory;
     private ParameterDecoder a, b;
     private Word currentWord;
+    private Instruction currentInstruction;
 
     public CPU() {
         formatter = new HexaFormatter();
@@ -104,12 +105,20 @@ public class CPU {
         b = decoderFor(currentWord.b());
         a.setMyProgramCounter(programCounter);
         b.setMyProgramCounter(programCounter + a.size());
-        final Instruction instruction = instructions[currentWord.code()];
+        currentInstruction = instructions[currentWord.code()];
 
-        instruction.execute();
+        currentInstruction.execute();
 
-        programCounter += sumToPC(instruction);
-        return String.format("%s: %s %s, %s", formatter.toHexa4Spaces(currentProgramCounter), currentWord, a, b);
+        programCounter += sumToPC(currentInstruction);
+        return assemblerFor(currentProgramCounter);
+    }
+
+    private String assemblerFor(final int currentProgramCounter) {
+        if (currentWord.code() != OpCodes.NOT_BASIC) {
+            return String.format("%s: %s %s, %s", formatter.toHexa4Spaces(currentProgramCounter), currentWord, a, b);
+        } else {
+            return String.format("%s: %s", formatter.toHexa4Spaces(currentProgramCounter), currentInstruction);
+        }
     }
 
     private int sumToPC(final Instruction instruction) {

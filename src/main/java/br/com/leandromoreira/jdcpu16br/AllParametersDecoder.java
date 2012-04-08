@@ -12,6 +12,7 @@ public class AllParametersDecoder {
     private static final int NEXT_WORD_INDIRECT = 0x1E;
     private static final int NEXT_WORD = 0x1F;
     private final CPU cpu;
+    private final HexaFormatter formatter = new HexaFormatter();
     private final String[] registers = new String[]{"A", "B", "C", "X", "Y", "Z", "I", "J"};
 
     public AllParametersDecoder(final CPU cpu) {
@@ -106,13 +107,13 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
-                representation = "[" + toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
+                representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
                 cpu.memory().writeAt(cpu.memory().readFrom(getMyProgramCounter() + 1), value);
             }
 
             @Override
             public int read() {
-                representation = "[" + toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
+                representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
                 return cpu.memory().readFrom(cpu.memory().readFrom(getMyProgramCounter() + 1));
             }
 
@@ -129,7 +130,7 @@ public class AllParametersDecoder {
 
             @Override
             public int read() {
-                representation = toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1));
+                representation = formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1));
                 return cpu.memory().readFrom(getMyProgramCounter() + 1);
             }
 
@@ -189,7 +190,7 @@ public class AllParametersDecoder {
 
                 @Override
                 public int read() {
-                    representation = toHexadecimal(index - 0x20);
+                    representation = formatter.toHexadecimal(index - 0x20);
                     return index - 0x20;
                 }
             };
@@ -212,7 +213,7 @@ public class AllParametersDecoder {
 
                 private int nextWordPlusRegister() {
                     final int nextWord = getMyProgramCounter() + 1;
-                    representation = "[" + toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + registers[index - 0x10] + "]";
+                    representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + registers[index - 0x10] + "]";
                     return cpu.memory().readFrom(cpu.memory().readFrom(nextWord) + cpu.register(index - 0x10));
                 }
 
@@ -224,7 +225,5 @@ public class AllParametersDecoder {
         }
     }
 
-    private String toHexadecimal(final int value) {
-        return "0x" + Integer.toHexString(value).toUpperCase();
-    }
+
 }

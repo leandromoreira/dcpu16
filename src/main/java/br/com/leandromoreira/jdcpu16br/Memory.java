@@ -2,7 +2,7 @@ package br.com.leandromoreira.jdcpu16br;
 
 public class Memory {
 
-    private static final int MEMORY_SIZE = 0x10000;
+    public static final int MEMORY_SIZE = 0x10000;
     private final int[] memory = new int[MEMORY_SIZE];
     private int maximumFilled = 0;
 

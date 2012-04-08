@@ -11,4 +11,10 @@ public class HexaFormatterTest {
         final HexaFormatter formatter = new HexaFormatter();
         assertThat(formatter.toHexa4Spaces(0x1000), is("0x1000"));
     }
+
+    @Test
+    public void it_format_as_a_hexadecimal_number() {
+        final HexaFormatter formatter = new HexaFormatter();
+        assertThat(formatter.toHexadecimal(10), is("0xA"));
+    }
 }
