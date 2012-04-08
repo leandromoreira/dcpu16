@@ -20,6 +20,7 @@ public class CPU {
     private ParameterDecoder a, b;
     private Word currentWord;
     private Instruction currentInstruction;
+    private int currentCycleCost;
 
     public CPU() {
         formatter = new HexaFormatter();
@@ -106,8 +107,9 @@ public class CPU {
         currentInstruction = instructions[currentWord.code()];
 
         currentInstruction.execute();
-
         programCounter += sumToPC(currentInstruction);
+        
+        currentCycleCost = currentInstruction.cycles() + a.extraCycles() + b.extraCycles();
         return assemblerFor(currentProgramCounter);
     }
 
