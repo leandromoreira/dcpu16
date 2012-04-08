@@ -18,6 +18,19 @@ public class TestCPU {
     }
 
     @Test
+    public void it_returns_stack_and_increment_itself(){
+        cpu.setStackPointer(0x0002);
+        assertThat(cpu.popStackPointer(), is(0x0002));
+        assertThat(cpu.getStackPointer(), is(0x0003));
+    }
+    
+        @Test
+    public void it_returns_drecremented_stack_pointer(){
+        cpu.setStackPointer(0x0002);
+        assertThat(cpu.pushStackPointer(), is(0x0001));
+    }
+    
+    @Test
     public void it_performs_set_a_to_direct_registers() {
         cpu.setRegister(A, 0xF);
         cpu.setRegister(B, 0xA);

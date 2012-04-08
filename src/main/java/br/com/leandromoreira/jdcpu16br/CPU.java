@@ -76,13 +76,11 @@ public class CPU {
         return stackPointer;
     }
 
-    public int getStackPointerAndIncrement() {
-        final int sp = stackPointer;
-        stackPointer++;
-        return sp;
+    public int popStackPointer() {
+        return stackPointer++;
     }
 
-    public int getStackPointerAndDecrement() {
+    public int pushStackPointer() {
         return --stackPointer;
     }
 

@@ -33,8 +33,7 @@ public class AllParametersDecoder {
 
             @Override
             public int read() {
-                representation = "POP";
-                return cpu.memory().readFrom(cpu.getStackPointerAndIncrement());
+                return cpu.memory().readFrom(cpu.popStackPointer());
             }
         };
         decoder[PEEK] = new ParameterDecoder(PEEK) {
@@ -45,7 +44,6 @@ public class AllParametersDecoder {
 
             @Override
             public int read() {
-                representation = "PEEK";
                 return cpu.memory().readFrom(cpu.getStackPointer());
             }
         };
@@ -57,21 +55,18 @@ public class AllParametersDecoder {
 
             @Override
             public int read() {
-                representation = "PUSH";
-                return cpu.memory().readFrom(cpu.getStackPointerAndDecrement());
+                return cpu.memory().readFrom(cpu.pushStackPointer());
             }
         };
         decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
 
             @Override
             public void write(final int value) {
-                representation = "SP";
                 cpu.setStackPointer(value);
             }
 
             @Override
             public int read() {
-                representation = "SP";
                 return cpu.getStackPointer();
             }
         };
@@ -79,13 +74,11 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
-                representation = "PC";
                 cpu.setProgramCounter(value);
             }
 
             @Override
             public int read() {
-                representation = "PC";
                 return cpu.getProgramCounter();
             }
         };
@@ -93,13 +86,11 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
-                representation = "O";
                 cpu.setOverflow(value);
             }
 
             @Override
             public int read() {
-                representation = "O";
                 return cpu.getOverflow();
             }
         };
