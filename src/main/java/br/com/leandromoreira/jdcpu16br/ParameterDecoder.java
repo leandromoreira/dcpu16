@@ -4,6 +4,7 @@ public abstract class ParameterDecoder {
 
     protected final int index;
     protected String representation;
+    private int extraCycles;
     private int myProgramCounter;
     private static final String[] defaultMapping = new String[0x40];
 
@@ -15,6 +16,7 @@ public abstract class ParameterDecoder {
         defaultMapping[0x1C] = "PC";
         defaultMapping[0x1D] = "O";
     }
+    
 
     public ParameterDecoder(final int index) {
         this.representation = defaultMapping[index];
@@ -31,6 +33,10 @@ public abstract class ParameterDecoder {
 
     public int size() {
         return 0;
+    }
+    
+    public int extraCycles(){
+        return extraCycles;
     }
 
     public abstract void write(final int value);
