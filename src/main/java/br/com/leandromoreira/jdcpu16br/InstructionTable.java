@@ -58,8 +58,9 @@ public class InstructionTable {
 
             @Override
             public void execute() {
-                cpu.parameterA().write(cpu.parameterA().read() + cpu.parameterB().read());
-                final int newOverflow = (cpu.parameterA().read() > 0xFFFF) ? 0x0001 : 0x0000;
+                final int newValue = cpu.parameterA().read() + cpu.parameterB().read();
+                final int newOverflow = (newValue > 0xFFFF) ? 0x0001 : 0x0000;
+                cpu.parameterA().write(newValue & 0xFFFF);
                 cpu.setOverflow(newOverflow);
             }
 
@@ -72,8 +73,9 @@ public class InstructionTable {
 
             @Override
             public void execute() {
-                cpu.parameterA().write(cpu.parameterA().read() - cpu.parameterB().read());
-                final int newOverflow = (cpu.parameterA().read() < 0x0000) ? 0xFFFF : 0x0000;
+                final int newValue = cpu.parameterA().read() - cpu.parameterB().read();
+                 final int newOverflow = (newValue < 0x0000) ? 0xFFFF : 0x0000;
+                cpu.parameterA().write(newValue & 0xFFFF);
                 cpu.setOverflow(newOverflow);
             }
 
