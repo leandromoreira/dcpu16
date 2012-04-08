@@ -31,6 +31,9 @@ public class InstructionTable {
                         cpu.setProgramCounter(newPC);
                         defaultSumToNextInstruction = ZERO;
                         break;
+                    default:
+                        assembler = "SYSCALL RESERVED "+formatter.toHexadecimal(syscall);
+                        break;
                 }
             }
 
