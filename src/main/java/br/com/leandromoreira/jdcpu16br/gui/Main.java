@@ -7,6 +7,8 @@ package br.com.leandromoreira.jdcpu16br.gui;
 import br.com.leandromoreira.jdcpu16br.CPU;
 import br.com.leandromoreira.jdcpu16br.HexaFormatter;
 import br.com.leandromoreira.jdcpu16br.Memory;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -14,11 +16,14 @@ import br.com.leandromoreira.jdcpu16br.Memory;
  */
 public class Main extends javax.swing.JFrame {
 
+    private static final String EMPTY_STRING = "";
+    private static final String ONE_SPACE = " ";
     /**
      * Creates new form Main
      */
     private final CPU cpu;
     private final Memory memory;
+    final HexaFormatter formatter = new HexaFormatter();
 
     public Main() {
         initComponents();
@@ -179,7 +184,6 @@ public class Main extends javax.swing.JFrame {
         jTxtOutup.setColumns(20);
         jTxtOutup.setForeground(new java.awt.Color(51, 51, 255));
         jTxtOutup.setRows(5);
-        jTxtOutup.setText("ADD I, 0x20");
         jTxtOutup.setToolTipText("");
         jScrollPane3.setViewportView(jTxtOutup);
 
@@ -325,24 +329,29 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
-        jTxtAreaMemory.setText("0x0000: 0x7C01 0x7C01 0x7C01 0x7C01");
-
+        updateRegisters();
     }//GEN-LAST:event_formWindowOpened
 
     private void jBtnLoadDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadDumpActionPerformed
-
-        final String rawText = jTxtAreaDump.getText().replace("\n", "").replace("\r", "");
-        final String[] hexadecimalCells = rawText.split(" ");
+        final String rawText = jTxtAreaDump.getText().replace("\n", EMPTY_STRING).replace("\r", EMPTY_STRING);
+        final String[] hexadecimalCells = rawText.split(ONE_SPACE);
         memory.load(hexadecimalCells);
-        jTxtAreaMemory.setText("");
+        updateMemory();
+    }
 
-        final HexaFormatter formatter = new HexaFormatter();
+    private void updateMemory() {
         final StringBuilder sb = new StringBuilder();
+
+        jTxtAreaMemory.setText(EMPTY_STRING);
         for (int address = 0x0000; address < memory.getMaximumFilled();) {
-            sb.append("\n").append(formatter.toHexa4Spaces(memory.readFrom(address++)));
+            if (address % 4 == 0) {
+                sb.append("\n").append(formatter.toHexa4Spaces(address)).append(": ");
+            }
+            sb.append(formatter.toHexa4Spaces(memory.readFrom(address++))).append(ONE_SPACE);
         }
-        sb.deleteCharAt(0);
+        if (sb.length() > 0) {
+            sb.deleteCharAt(0);
+        }
         jTxtAreaMemory.setText(sb.toString());
     }//GEN-LAST:event_jBtnLoadDumpActionPerformed
 
@@ -421,4 +430,23 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtPC;
     private javax.swing.JTextField jTxtSP;
     // End of variables declaration//GEN-END:variables
+
+    private void updateRegisters() {
+        updateRegiter(jTxtPC, cpu.getProgramCounter());
+        updateRegiter(jTxtSP, cpu.getStackPointer());
+        updateRegiter(jTxtO, cpu.getOverflow());
+
+        updateRegiter(A, cpu.register(CPU.A));
+        updateRegiter(B, cpu.register(CPU.B));
+        updateRegiter(C, cpu.register(CPU.C));
+        updateRegiter(X, cpu.register(CPU.X));
+        updateRegiter(Y, cpu.register(CPU.Y));
+        updateRegiter(Z, cpu.register(CPU.Z));
+        updateRegiter(I, cpu.register(CPU.I));
+        updateRegiter(J, cpu.register(CPU.J));
+    }
+
+    private void updateRegiter(final JTextField component, final int value) {
+        component.setText(formatter.toHexa4Spaces(value));
+    }
 }

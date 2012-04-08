@@ -14,10 +14,11 @@ public class Memory {
         memory[address] = value;
     }
 
-    private void clear() {
+    public void clear() {
         for (int address = 0x0000; address < MEMORY_SIZE; address++) {
             memory[address] = 0x0000;
         }
+        maximumFilled = 0;
     }
 
     public int getMaximumFilled() {
@@ -30,7 +31,7 @@ public class Memory {
             int address = 0x0000;
             for (final String oneValue : hexadecimalCells) {
                 if (oneValue != null && !"".equals(oneValue.trim())) {
-                    memory[address++] = Integer.valueOf(oneValue, 16);
+                    memory[address++] = Integer.valueOf(oneValue.toLowerCase().replace("x", ""), 16);
                     ++maximumFilled;
                 }
             }

@@ -10,7 +10,7 @@ public class CPU {
     public static final int Z = 0x5;
     public static final int I = 0x6;
     public static final int J = 0x7;
-    private int[] register = new int[0x8];
+    private int[] register;
     private int programCounter, stackPointer;
     private int overflow;
     private final Instruction[] instructions;
@@ -21,9 +21,16 @@ public class CPU {
 
     public CPU() {
         memory = new Memory();
-        programCounter = stackPointer = overflow = 0x0000;
         instructions = new InstructionTable().instructionSet(this);
         decoders = new AllParametersDecoder(this).all();
+        reset();
+    }
+
+    public final void reset() {
+        stackPointer = 0xFFFF;
+        programCounter = overflow = 0x0000;
+        register = new int[0x8];
+        memory.clear();
     }
 
     public Instruction[] getInstructions() {
@@ -111,6 +118,4 @@ public class CPU {
     public ParameterDecoder decoderFor(final int value) {
         return decoders[value];
     }
-
-
 }
