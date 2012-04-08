@@ -25,9 +25,10 @@ public class InstructionTable {
                 final int syscallOpCode = cpu.getCurrentWord().a();
                 final int a = cpu.getCurrentWord().b();
                 final ParameterDecoder aDecoded = cpu.decoderFor(a);
+                final Syscall newInstruction = syscalls()[syscallOpCode];
 
-                if (syscalls()[syscallOpCode] != null) {
-                    syscalls()[syscallOpCode].execute(aDecoded.read());
+                if (newInstruction != null) {
+                    newInstruction.execute(aDecoded.read());
                 } else {
                     assembler = "RESERVED " + formatter.toHexadecimal(aDecoded.read());
                 }
