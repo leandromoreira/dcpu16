@@ -27,11 +27,7 @@ public class InstructionTable {
                 final ParameterDecoder aDecoded = cpu.decoderFor(a);
                 final Syscall newInstruction = syscalls()[syscallOpCode];
 
-                if (newInstruction != null) {
-                    newInstruction.execute(aDecoded.read());
-                } else {
-                    assembler = "RESERVED " + formatter.toHexadecimal(aDecoded.read());
-                }
+                assembler = (newInstruction != null) ? newInstruction.execute(aDecoded.read()) : "RESERVED " + formatter.toHexadecimal(aDecoded.read());
             }
 
             public Syscall[] syscalls() {
@@ -39,11 +35,11 @@ public class InstructionTable {
                     syscalls[SYSCALL_JSR] = new Syscall() {
 
                         @Override
-                        public void execute(final int a) {
-                            assembler = "JSR " + formatter.toHexadecimal(a);
+                        public String execute(final int a) {
                             cpu.setStackPointer(cpu.getProgramCounter() + 1);
                             cpu.setProgramCounter(a);
                             defaultSumToNextInstruction = ZERO;
+                            return "JSR " + formatter.toHexadecimal(a);
                         }
                     };
                     syscallsAlreadyFilled = true;
@@ -280,6 +276,6 @@ public class InstructionTable {
 
     private interface Syscall {
 
-        void execute(final int a);
+        String execute(final int a);
     }
 }
