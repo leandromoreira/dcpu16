@@ -4,6 +4,12 @@ You can read my view of specs on [documentation](https://github.com/leandromorei
 
 ## Screenshots
 
+### New debugger
+
+![JDCPU16BR Debugger](http://i41.tinypic.com/28qrpq8.png)
+
+### Old debugger
+
 ![JDCPU16BR Debugger](http://s14.postimage.org/ncw5pi2tt/jdcpu_16br_v001.png)
 
 ## Resources
