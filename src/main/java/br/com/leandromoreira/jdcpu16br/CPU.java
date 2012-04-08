@@ -10,6 +10,7 @@ public class CPU {
     public static final int Z = 0x5;
     public static final int I = 0x6;
     public static final int J = 0x7;
+    private final HexaFormatter formatter;
     private int[] register;
     private int programCounter, stackPointer;
     private int overflow;
@@ -20,6 +21,7 @@ public class CPU {
     private Word currentWord;
 
     public CPU() {
+        formatter = new HexaFormatter();
         memory = new Memory();
         instructions = new InstructionTable().instructionSet(this);
         decoders = new AllParametersDecoder(this).all();
@@ -95,7 +97,7 @@ public class CPU {
         register[index] = value;
     }
 
-    public void step() {
+    public String step() {
         final int currentProgramCounter = programCounter;
         currentWord = new Word(memory.readFrom(programCounter));
         a = decoderFor(currentWord.a());
@@ -106,9 +108,8 @@ public class CPU {
 
         instruction.execute();
 
-        System.out.println(String.format("%s: %s %s, %s", new HexaFormatter().toHexa4Spaces(currentProgramCounter), currentWord, a, b));
-
         programCounter += sumToPC(instruction);
+        return String.format("%s: %s %s, %s", formatter.toHexa4Spaces(currentProgramCounter), currentWord, a, b);
     }
 
     private int sumToPC(final Instruction instruction) {
