@@ -45,6 +45,7 @@ public class InstructionTable {
                             defaultSumToNextInstruction = ZERO;
                         }
                     };
+                    syscallsAlreadyFilled = true;
                 }
                 return syscalls;
             }
