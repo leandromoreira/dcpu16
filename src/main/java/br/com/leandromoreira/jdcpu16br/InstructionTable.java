@@ -17,24 +17,36 @@ public class InstructionTable {
 
             private int cycles = 2;
             private String assembler = "";
+            private final Syscall[] syscalls = new Syscall[0b111111];
+            private boolean syscallsAlreadyFilled = false;
 
             @Override
             public void execute() {
-                final int syscall = cpu.getCurrentWord().a();
+                final int syscallOpCode = cpu.getCurrentWord().a();
                 final int a = cpu.getCurrentWord().b();
                 final ParameterDecoder aDecoded = cpu.decoderFor(a);
-                switch (syscall) {
-                    case SYSCALL_JSR:
-                        final int newPC = aDecoded.read();
-                        assembler = "JSR " + formatter.toHexadecimal(newPC);
-                        cpu.setStackPointer(cpu.getProgramCounter() + 1);
-                        cpu.setProgramCounter(newPC);
-                        defaultSumToNextInstruction = ZERO;
-                        break;
-                    default:
-                        assembler = "SYSCALL RESERVED " + formatter.toHexadecimal(syscall);
-                        break;
+
+                if (syscalls()[syscallOpCode] != null) {
+                    syscalls()[syscallOpCode].execute(aDecoded.read());
+                } else {
+                    assembler = "RESERVED " + formatter.toHexadecimal(aDecoded.read());
                 }
+            }
+
+            public Syscall[] syscalls() {
+                if (!syscallsAlreadyFilled) {
+                    syscalls[SYSCALL_JSR] = new Syscall() {
+
+                        @Override
+                        public void execute(final int a) {
+                            assembler = "JSR " + formatter.toHexadecimal(a);
+                            cpu.setStackPointer(cpu.getProgramCounter() + 1);
+                            cpu.setProgramCounter(a);
+                            defaultSumToNextInstruction = ZERO;
+                        }
+                    };
+                }
+                return syscalls;
             }
 
             @Override
@@ -74,7 +86,7 @@ public class InstructionTable {
             @Override
             public void execute() {
                 final int newValue = cpu.parameterA().read() - cpu.parameterB().read();
-                 final int newOverflow = (newValue < 0x0000) ? 0xFFFF : 0x0000;
+                final int newOverflow = (newValue < 0x0000) ? 0xFFFF : 0x0000;
                 cpu.parameterA().write(newValue & 0xFFFF);
                 cpu.setOverflow(newOverflow);
             }
@@ -262,5 +274,10 @@ public class InstructionTable {
         final ParameterDecoder b = cpu.decoderFor(currentWord.b());
         final Instruction instruction = cpu.getInstructions()[currentWord.code()];
         return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
+    }
+
+    private interface Syscall {
+
+        void execute(final int a);
     }
 }
