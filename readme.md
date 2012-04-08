@@ -4,7 +4,7 @@ You can read my view of specs on [documentation](https://github.com/leandromorei
 
 ## Screenshots
 
-[http://s14.postimage.org/ncw5pi2tt/jdcpu_16br_v001.png]
+![JDCPU16BR Debugger](http://s14.postimage.org/ncw5pi2tt/jdcpu_16br_v001.png)
 
 ## Resources
 
