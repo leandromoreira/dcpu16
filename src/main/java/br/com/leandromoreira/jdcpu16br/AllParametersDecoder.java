@@ -35,11 +35,6 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.memory().readFrom(cpu.popStackPointer());
             }
-
-            @Override
-            public int extraCycles() {
-                return 1;
-            }
         };
         decoder[PEEK] = new ParameterDecoder(PEEK) {
 
@@ -51,11 +46,6 @@ public class AllParametersDecoder {
             public int read() {
                 return cpu.memory().readFrom(cpu.getStackPointer());
             }
-
-            @Override
-            public int extraCycles() {
-                return 1;
-            }
         };
         decoder[PUSH] = new ParameterDecoder(PUSH) {
 
@@ -66,11 +56,6 @@ public class AllParametersDecoder {
             @Override
             public int read() {
                 return cpu.memory().readFrom(cpu.pushStackPointer());
-            }
-
-            @Override
-            public int extraCycles() {
-                return 1;
             }
         };
         decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
@@ -130,7 +115,7 @@ public class AllParametersDecoder {
 
             @Override
             public int extraCycles() {
-                return 2;
+                return 1;
             }
         };
         decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
@@ -147,11 +132,6 @@ public class AllParametersDecoder {
 
             @Override
             public int size() {
-                return 1;
-            }
-
-            @Override
-            public int extraCycles() {
                 return 1;
             }
         };
@@ -192,11 +172,6 @@ public class AllParametersDecoder {
                     representation = "[" + literalRegisterFor[index - 0x8] + "]";
                     return cpu.memory().readFrom(cpu.register(index - 0x8));
                 }
-
-                @Override
-                public int extraCycles() {
-                    return 1;
-                }
             };
         }
     }
@@ -233,6 +208,7 @@ public class AllParametersDecoder {
                 }
 
                 private int nextWordPlusRegister() {
+                    //TODO: USE THE NEXT WORD LITERAL VALUE TO SEE 
                     final int nextWord = getMyProgramCounter() + 1;
                     final int correctIndex = index - 0x10;
                     representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + literalRegisterFor[correctIndex] + "]";
@@ -246,7 +222,7 @@ public class AllParametersDecoder {
 
                 @Override
                 public int extraCycles() {
-                    return 2;
+                    return 1;
                 }
             };
         }
