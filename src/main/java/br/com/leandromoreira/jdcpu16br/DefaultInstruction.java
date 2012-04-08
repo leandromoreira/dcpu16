@@ -2,7 +2,6 @@ package br.com.leandromoreira.jdcpu16br;
 
 public abstract class DefaultInstruction implements Instruction {
 
-    protected int cost;
     protected int defaultSumToNextInstruction = 1;
 
     @Override

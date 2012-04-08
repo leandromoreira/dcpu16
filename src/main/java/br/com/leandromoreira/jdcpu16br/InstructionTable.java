@@ -39,7 +39,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return cycles + cost;
+                return cycles;
             }
 
             @Override
@@ -65,7 +65,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[SUB] = new DefaultInstruction() {
@@ -79,7 +79,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[MUL] = new DefaultInstruction() {
@@ -92,7 +92,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[DIV] = new DefaultInstruction() {
@@ -110,7 +110,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 3 + cost;
+                return 3;
             }
         };
         instruction[MOD] = new DefaultInstruction() {
@@ -123,7 +123,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 3 + cost;
+                return 3;
             }
         };
         instruction[SHL] = new DefaultInstruction() {
@@ -136,7 +136,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[SHR] = new DefaultInstruction() {
@@ -149,7 +149,7 @@ public class InstructionTable {
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[AND] = new DefaultInstruction() {
@@ -179,14 +179,13 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
-                    cost++;
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[IFN] = new DefaultInstruction() {
@@ -194,14 +193,13 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
-                    cost++;
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[IFG] = new DefaultInstruction() {
@@ -209,14 +207,13 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
-                    cost++;
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
         instruction[IFB] = new DefaultInstruction() {
@@ -224,14 +221,13 @@ public class InstructionTable {
             @Override
             public void execute() {
                 if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
-                    cost++;
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
                 }
             }
 
             @Override
             public int cycles() {
-                return 2 + cost;
+                return 2;
             }
         };
 

@@ -29,6 +29,7 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
+                cpu.memory().writeAt(cpu.popStackPointer(), value);
             }
 
             @Override
@@ -40,6 +41,7 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
+                cpu.memory().writeAt(cpu.getStackPointer(), value);
             }
 
             @Override
@@ -51,6 +53,7 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
+                cpu.memory().writeAt(cpu.pushStackPointer(), value);
             }
 
             @Override
