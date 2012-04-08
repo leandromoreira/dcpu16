@@ -97,6 +97,10 @@ public class CPU {
         register[index] = value;
     }
 
+    public int getCurrentCycleCost() {
+        return currentCycleCost;
+    }
+
     public String step() {
         final int currentProgramCounter = programCounter;
         currentWord = new Word(memory.readFrom(programCounter));
@@ -108,7 +112,7 @@ public class CPU {
 
         currentInstruction.execute();
         programCounter += sumToPC(currentInstruction);
-        
+
         currentCycleCost = currentInstruction.cycles() + a.extraCycles() + b.extraCycles();
         return assemblerFor(currentProgramCounter);
     }

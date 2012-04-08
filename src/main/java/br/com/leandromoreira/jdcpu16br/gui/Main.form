@@ -32,6 +32,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane2" alignment="0" min="-2" pref="284" max="-2" attributes="0"/>
                   <Component id="jLblDump" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLblCycles" alignment="0" min="-2" pref="282" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -53,8 +54,6 @@
                                       <Component id="jLblPC1" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="A" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
                                   </Group>
                                   <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                       <Group type="102" attributes="0">
@@ -213,6 +212,7 @@
                           <Component id="jLblPC" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLblCycles" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -240,6 +240,7 @@
         <Component class="javax.swing.JTextArea" name="jTxtAreaMemory">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Console" size="12" style="0"/>
             </Property>
@@ -250,6 +251,7 @@
     </Container>
     <Component class="javax.swing.JTextField" name="jTxtPC">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -258,6 +260,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTxtSP">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -266,6 +269,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTxtO">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -320,6 +324,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="C">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -339,6 +344,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="A">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -347,6 +353,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="B">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -355,6 +362,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="X">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -396,6 +404,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="I">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -415,6 +424,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="Y">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -423,6 +433,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="Z">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -431,6 +442,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="J">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Console" size="12" style="0"/>
         </Property>
@@ -500,6 +512,7 @@
         <Component class="javax.swing.JTextArea" name="jTxtOutup">
           <Properties>
             <Property name="columns" type="int" value="20"/>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Console" size="12" style="0"/>
             </Property>
@@ -549,6 +562,13 @@
           <Font name="Tahoma" size="11" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Registers"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLblCycles">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

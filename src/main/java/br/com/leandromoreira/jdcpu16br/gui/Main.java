@@ -26,6 +26,7 @@ public class Main extends javax.swing.JFrame {
     private final CPU cpu;
     private final Memory memory;
     final HexaFormatter formatter = new HexaFormatter();
+    private int sumCycle;
 
     public Main() {
         initComponents();
@@ -79,6 +80,7 @@ public class Main extends javax.swing.JFrame {
         jTxtWatcher1 = new javax.swing.JTextField();
         jLblMemWatch1 = new javax.swing.JLabel();
         jLblMemory5 = new javax.swing.JLabel();
+        jLblCycles = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JDCPU-16BR - Yet another vm implementation of DCPU-16 and debugger");
@@ -93,16 +95,20 @@ public class Main extends javax.swing.JFrame {
         jLblMemory.setText("Memory");
 
         jTxtAreaMemory.setColumns(20);
+        jTxtAreaMemory.setEditable(false);
         jTxtAreaMemory.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtAreaMemory.setRows(5);
         jScrollPane1.setViewportView(jTxtAreaMemory);
 
+        jTxtPC.setEditable(false);
         jTxtPC.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtPC.setText("0xFFFF");
 
+        jTxtSP.setEditable(false);
         jTxtSP.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtSP.setText("0xFFFF");
 
+        jTxtO.setEditable(false);
         jTxtO.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtO.setText("0xFFFF");
 
@@ -123,6 +129,7 @@ public class Main extends javax.swing.JFrame {
         jLblPC1.setForeground(new java.awt.Color(102, 102, 102));
         jLblPC1.setText("A");
 
+        C.setEditable(false);
         C.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         C.setText("0xFFFF");
 
@@ -130,12 +137,15 @@ public class Main extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
         jLabel4.setText("C");
 
+        A.setEditable(false);
         A.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         A.setText("0xFFFF");
 
+        B.setEditable(false);
         B.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         B.setText("0xFFFF");
 
+        X.setEditable(false);
         X.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         X.setText("0xFFFF");
 
@@ -151,6 +161,7 @@ public class Main extends javax.swing.JFrame {
         jLblPC2.setForeground(new java.awt.Color(102, 102, 102));
         jLblPC2.setText("Y");
 
+        I.setEditable(false);
         I.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         I.setText("0xFFFF");
 
@@ -158,12 +169,15 @@ public class Main extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("I");
 
+        Y.setEditable(false);
         Y.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         Y.setText("0xFFFF");
 
+        Z.setEditable(false);
         Z.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         Z.setText("0xFFFF");
 
+        J.setEditable(false);
         J.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         J.setText("0xFFFF");
 
@@ -194,6 +208,7 @@ public class Main extends javax.swing.JFrame {
         });
 
         jTxtOutup.setColumns(20);
+        jTxtOutup.setEditable(false);
         jTxtOutup.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtOutup.setForeground(new java.awt.Color(51, 51, 255));
         jTxtOutup.setRows(5);
@@ -214,6 +229,8 @@ public class Main extends javax.swing.JFrame {
         jLblMemory5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLblMemory5.setText("Registers");
 
+        jLblCycles.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -222,7 +239,8 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLblDump))
+                    .addComponent(jLblDump)
+                    .addComponent(jLblCycles, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -241,7 +259,6 @@ public class Main extends javax.swing.JFrame {
                                         .addComponent(jLblPC1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(A, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup())
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel3)
@@ -363,7 +380,8 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(jTxtO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLblPC)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLblCycles))))
                 .addContainerGap())
         );
 
@@ -382,6 +400,7 @@ public class Main extends javax.swing.JFrame {
         updateMemory();
         updateRegisters();
         jTxtOutup.setText(EMPTY_STRING);
+        sumCycle = 0;
     }
 
     private void updateMemory() {
@@ -406,6 +425,9 @@ public class Main extends javax.swing.JFrame {
         final String assembler = cpu.step();
         final String newOutput = assembler + "\n" + jTxtOutup.getText();
         jTxtOutup.setText(newOutput);
+        jTxtOutup.moveCaretPosition(0);
+        sumCycle += cpu.getCurrentCycleCost();
+        jLblCycles.setText("Last Cycle cost: " + cpu.getCurrentCycleCost() + " Total: " + sumCycle);
         updateMemory();
         updateRegisters();
         updateMemoryWatchers();
@@ -472,6 +494,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLblCycles;
     private javax.swing.JLabel jLblDump;
     private javax.swing.JLabel jLblMemWatch1;
     private javax.swing.JLabel jLblMemory;
