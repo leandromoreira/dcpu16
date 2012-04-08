@@ -32,7 +32,7 @@ public class InstructionTable {
                         defaultSumToNextInstruction = ZERO;
                         break;
                     default:
-                        assembler = "SYSCALL RESERVED "+formatter.toHexadecimal(syscall);
+                        assembler = "SYSCALL RESERVED " + formatter.toHexadecimal(syscall);
                         break;
                 }
             }
@@ -176,58 +176,78 @@ public class InstructionTable {
         };
         instruction[IFE] = new DefaultInstruction() {
 
+            private int costOfFaling = 0;
+
             @Override
             public void execute() {
                 if (cpu.parameterA().read() != cpu.parameterB().read()) {
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    costOfFaling = 1;
+                } else {
+                    costOfFaling = 0;
                 }
             }
 
             @Override
             public int cycles() {
-                return 2;
+                return 2 + costOfFaling;
             }
         };
         instruction[IFN] = new DefaultInstruction() {
+
+            private int costOfFaling = 0;
 
             @Override
             public void execute() {
                 if (cpu.parameterA().read() == cpu.parameterB().read()) {
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    costOfFaling = 1;
+                } else {
+                    costOfFaling = 0;
                 }
             }
 
             @Override
             public int cycles() {
-                return 2;
+                return 2 + costOfFaling;
             }
         };
         instruction[IFG] = new DefaultInstruction() {
+
+            private int costOfFaling = 0;
 
             @Override
             public void execute() {
                 if (cpu.parameterA().read() < cpu.parameterB().read()) {
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    costOfFaling = 1;
+                } else {
+                    costOfFaling = 0;
                 }
             }
 
             @Override
             public int cycles() {
-                return 2;
+                return 2 + costOfFaling;
             }
         };
         instruction[IFB] = new DefaultInstruction() {
+
+            private int costOfFaling = 0;
 
             @Override
             public void execute() {
                 if ((cpu.parameterA().read() & cpu.parameterB().read()) == ZERO) {
                     defaultSumToNextInstruction += nextInstructionSize(cpu.getProgramCounter() + 1);
+                    costOfFaling = 1;
+                } else {
+                    costOfFaling = 0;
                 }
             }
 
             @Override
             public int cycles() {
-                return 2;
+                return 2 + costOfFaling;
             }
         };
 
