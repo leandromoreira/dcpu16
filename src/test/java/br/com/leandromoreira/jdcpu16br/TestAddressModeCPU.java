@@ -26,6 +26,17 @@ public class TestAddressModeCPU {
     }
 
     @Test
+    public void it_performs_set_a_to_value_of_the_address_pointed_by_next_word_plus_register() {
+        cpu.setRegister(A, 0x0005);
+        cpu.setRegister(B, 0x0002);
+        memory.writeAt(0x0000, 0b010001_000000_0001);
+        memory.writeAt(0x0001, 0x0002);
+        memory.writeAt(0x0004, 0xC0DE);
+        cpu.step();
+        assertThat(cpu.register(A), is(0xC0DE));
+    }
+
+        @Test
     public void it_performs_set_a_to_indirect_registers() {
         cpu.setRegister(A, 0x0005);
         memory.writeAt(0x0005, 0x4);
@@ -33,7 +44,8 @@ public class TestAddressModeCPU {
         cpu.step();
         assertThat(cpu.register(A), is(0x4));
     }
-
+    
+    
     @Test
     public void it_performs_set_a_to_next_word() {
         memory.writeAt(0x0000, 0x7C01);

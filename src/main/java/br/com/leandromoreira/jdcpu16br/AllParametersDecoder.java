@@ -211,11 +211,10 @@ public class AllParametersDecoder {
                 }
 
                 private int nextWordPlusRegister() {
-                    //TODO: USE THE NEXT WORD LITERAL VALUE TO SEE 
                     final int nextWord = getMyProgramCounter() + 1;
                     final int correctIndex = index - 0x10;
                     representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + literalRegisterFor[correctIndex] + "]";
-                    return cpu.memory().readFrom(cpu.memory().readFrom(nextWord) + cpu.register(correctIndex));
+                    return cpu.memory().readFrom(nextWord) + cpu.register(correctIndex);
                 }
 
                 @Override
