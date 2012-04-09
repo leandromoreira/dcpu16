@@ -71,9 +71,9 @@ public class TestAddressModeCPU {
         memory.writeAt(0x0001, 0b011101_000001_0001);
         memory.writeAt(0x0002, 0b011100_000010_0001);
 
-        System.out.println(cpu.step());
-        System.out.println(cpu.step());
-        System.out.println(cpu.step());
+        cpu.step();
+        cpu.step();
+        cpu.step();
         
         assertThat(cpu.register(A), is(0x1));
         assertThat(cpu.register(B), is(0x2));
