@@ -340,5 +340,6 @@ public class TestCPU {
         for (int steps = 0; steps < 15; steps++) {
             cpu.step();
         }
+        //todo: asserts ;s
     }
 }

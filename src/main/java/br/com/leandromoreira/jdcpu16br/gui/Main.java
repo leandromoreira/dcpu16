@@ -81,6 +81,10 @@ public class Main extends javax.swing.JFrame {
         jLblMemWatch1 = new javax.swing.JLabel();
         jLblMemory5 = new javax.swing.JLabel();
         jLblCycles = new javax.swing.JLabel();
+        jTxtWatcher2 = new javax.swing.JTextField();
+        jLblMemWatch2 = new javax.swing.JLabel();
+        jTxtWatcher3 = new javax.swing.JTextField();
+        jLblMemWatch3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JDCPU-16BR - Yet another vm implementation of DCPU-16 and debugger");
@@ -222,6 +226,11 @@ public class Main extends javax.swing.JFrame {
 
         jTxtWatcher1.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
         jTxtWatcher1.setText("0xFFFF");
+        jTxtWatcher1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTxtWatcher1FocusLost(evt);
+            }
+        });
 
         jLblMemWatch1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLblMemWatch1.setText("0x0000");
@@ -230,6 +239,28 @@ public class Main extends javax.swing.JFrame {
         jLblMemory5.setText("Registers");
 
         jLblCycles.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        jTxtWatcher2.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
+        jTxtWatcher2.setText("0xFFFF");
+        jTxtWatcher2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTxtWatcher1FocusLost(evt);
+            }
+        });
+
+        jLblMemWatch2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLblMemWatch2.setText("0x0000");
+
+        jTxtWatcher3.setFont(new java.awt.Font("Lucida Console", 0, 12)); // NOI18N
+        jTxtWatcher3.setText("0xFFFF");
+        jTxtWatcher3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTxtWatcher1FocusLost(evt);
+            }
+        });
+
+        jLblMemWatch3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLblMemWatch3.setText("0x0000");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -305,8 +336,16 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLblMemory2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTxtWatcher1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLblMemWatch1))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLblMemWatch1)
+                        .addGap(10, 10, 10)
+                        .addComponent(jTxtWatcher2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLblMemWatch2)
+                        .addGap(10, 10, 10)
+                        .addComponent(jTxtWatcher3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLblMemWatch3))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,7 +410,12 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTxtWatcher1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLblMemWatch1)))
+                            .addComponent(jLblMemWatch1)
+                            .addComponent(jTxtWatcher2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTxtWatcher3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLblMemWatch3))
+                            .addComponent(jLblMemWatch2)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -391,6 +435,8 @@ public class Main extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         updateRegisters();
         jTxtWatcher1.setText(EMPTY_STRING);
+        jTxtWatcher2.setText(EMPTY_STRING);
+        jTxtWatcher3.setText(EMPTY_STRING);
     }//GEN-LAST:event_formWindowOpened
 
     private void jBtnLoadDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadDumpActionPerformed
@@ -433,6 +479,10 @@ public class Main extends javax.swing.JFrame {
         updateMemoryWatchers();
 
     }//GEN-LAST:event_jBtnStepActionPerformed
+
+    private void jTxtWatcher1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTxtWatcher1FocusLost
+        updateMemoryWatchers();
+    }//GEN-LAST:event_jTxtWatcher1FocusLost
 
     /**
      * @param args the command line arguments
@@ -497,6 +547,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLblCycles;
     private javax.swing.JLabel jLblDump;
     private javax.swing.JLabel jLblMemWatch1;
+    private javax.swing.JLabel jLblMemWatch2;
+    private javax.swing.JLabel jLblMemWatch3;
     private javax.swing.JLabel jLblMemory;
     private javax.swing.JLabel jLblMemory1;
     private javax.swing.JLabel jLblMemory2;
@@ -514,6 +566,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtPC;
     private javax.swing.JTextField jTxtSP;
     private javax.swing.JTextField jTxtWatcher1;
+    private javax.swing.JTextField jTxtWatcher2;
+    private javax.swing.JTextField jTxtWatcher3;
     // End of variables declaration//GEN-END:variables
 
     private void updateRegisters() {
@@ -536,12 +590,19 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void updateMemoryWatchers() {
-        final String textWatcher1 = jTxtWatcher1.getText().toLowerCase().replace("x", EMPTY_STRING);
-        if (formatter.isValidHexadecimal(textWatcher1)) {
-            final Integer watcher1 = Integer.valueOf(textWatcher1, 16);
-            updateRegiter(jTxtWatcher1, watcher1);
-            jLblMemWatch1.setText(formatter.toHexa4Spaces(memory.readFrom(watcher1)));
+        updateMemoryWatcher(jTxtWatcher1,jLblMemWatch1);
+        updateMemoryWatcher(jTxtWatcher2,jLblMemWatch2);
+        updateMemoryWatcher(jTxtWatcher3,jLblMemWatch3);
+    }
+    
+    private void updateMemoryWatcher(final JTextField text, final JLabel label){
+        String textWatcher1 = text.getText().toLowerCase().replace("x", EMPTY_STRING);
+        if (!formatter.isValidHexadecimal(textWatcher1)) {
+            textWatcher1 = "0";
         }
+        final Integer watcher1 = Integer.valueOf(textWatcher1, 16);
+        updateRegiter(text, watcher1);
+        label.setText(formatter.toHexa4Spaces(memory.readFrom(watcher1)));
     }
 
     private String[] extractValidHexaDecimals(String[] rawHexadecimal) {
