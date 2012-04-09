@@ -96,4 +96,12 @@ public class TestAddressModeCPU {
         cpu.step();
         assertThat(cpu.register(A), is(0x0030));
     }
+    
+        @Test
+    public void it_performs_set_a_to_literal_value() {
+        cpu.setRegister(A, 0xF);
+        memory.writeAt(0x0000, 0b100000_000000_0001);
+        cpu.step();
+        assertThat(cpu.register(A), is(0x00));
+    }
 }
