@@ -55,6 +55,14 @@ public class TestAddressModeCPU {
     }
 
     @Test
+    public void it_performs_peek() {
+        memory.writeAt(0xFFFF, 0xCAFE);
+        memory.writeAt(0x0000, 0b011001_000000_0001);
+        cpu.step();
+        assertThat(cpu.register(A), is(0xCAFE));
+    }
+
+    @Test
     public void it_performs_set_a_to_next_word() {
         memory.writeAt(0x0000, 0x7C01);
         memory.writeAt(0x0001, 0x0030);
