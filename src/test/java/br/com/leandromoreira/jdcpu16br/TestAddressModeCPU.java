@@ -74,7 +74,7 @@ public class TestAddressModeCPU {
         cpu.step();
         cpu.step();
         cpu.step();
-        
+
         assertThat(cpu.register(A), is(0x1));
         assertThat(cpu.register(B), is(0x2));
         assertThat(cpu.register(C), is(0x2));
@@ -82,6 +82,15 @@ public class TestAddressModeCPU {
 
     @Test
     public void it_performs_set_a_to_next_word() {
+        memory.writeAt(0x0000, 0b011110_000000_0001);
+        memory.writeAt(0x0001, 0x0030);
+        memory.writeAt(0x0030, 0x0015);
+        System.out.println(cpu.step());
+        assertThat(cpu.register(A), is(0x0015));
+    }
+
+    @Test
+    public void it_performs_set_a_to_literal_next_word() {
         memory.writeAt(0x0000, 0x7C01);
         memory.writeAt(0x0001, 0x0030);
         cpu.step();
