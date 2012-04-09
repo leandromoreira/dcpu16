@@ -442,6 +442,7 @@ public class Main extends javax.swing.JFrame {
     private void jBtnLoadDumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadDumpActionPerformed
         final String rawText = jTxtAreaDump.getText().replace("\n", ONE_SPACE).replace("\r", EMPTY_STRING);
         final String[] hexadecimalCells = extractValidHexaDecimals(rawText.split(ONE_SPACE));
+        cpu.reset();
         memory.load(hexadecimalCells);
         updateMemory();
         updateRegisters();
