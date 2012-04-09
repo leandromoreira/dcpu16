@@ -63,6 +63,24 @@ public class TestAddressModeCPU {
     }
 
     @Test
+    public void it_performs_write_to_sp_o_pc() {
+        cpu.setStackPointer(0x1);
+        cpu.setOverflow(0x2);
+
+        memory.writeAt(0x0000, 0b011011_000000_0001);
+        memory.writeAt(0x0001, 0b011101_000001_0001);
+        memory.writeAt(0x0002, 0b011100_000010_0001);
+
+        System.out.println(cpu.step());
+        System.out.println(cpu.step());
+        System.out.println(cpu.step());
+        
+        assertThat(cpu.register(A), is(0x1));
+        assertThat(cpu.register(B), is(0x2));
+        assertThat(cpu.register(C), is(0x2));
+    }
+
+    @Test
     public void it_performs_set_a_to_next_word() {
         memory.writeAt(0x0000, 0x7C01);
         memory.writeAt(0x0001, 0x0030);
