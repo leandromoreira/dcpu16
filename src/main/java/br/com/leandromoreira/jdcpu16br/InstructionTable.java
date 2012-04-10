@@ -1,6 +1,8 @@
 package br.com.leandromoreira.jdcpu16br;
 
 import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
+import static br.com.leandromoreira.jdcpu16br.DefaultInstruction.DEFAULT_SIZE_INSTRUCTION;
+
 
 public class InstructionTable {
 
@@ -194,6 +196,7 @@ public class InstructionTable {
                     defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
+                    defaultSumToNextInstruction = DEFAULT_SIZE_INSTRUCTION;
                     costOfFaling = 0;
                 }
             }
@@ -213,6 +216,7 @@ public class InstructionTable {
                     defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
+                    defaultSumToNextInstruction = DEFAULT_SIZE_INSTRUCTION;
                     costOfFaling = 0;
                 }
             }
@@ -232,6 +236,7 @@ public class InstructionTable {
                     defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
+                    defaultSumToNextInstruction = DEFAULT_SIZE_INSTRUCTION;
                     costOfFaling = 0;
                 }
             }
@@ -251,6 +256,7 @@ public class InstructionTable {
                     defaultSumToNextInstruction += nextInstructionSize(cpu, cpu.getProgramCounter() + 1);
                     costOfFaling = 1;
                 } else {
+                    defaultSumToNextInstruction = DEFAULT_SIZE_INSTRUCTION;
                     costOfFaling = 0;
                 }
             }
