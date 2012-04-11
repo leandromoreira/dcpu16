@@ -5,7 +5,7 @@
 
     <groupId>br.com.leandromoreira</groupId>
     <artifactId>jdcpu16br</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
     <packaging>jar</packaging>
 
     <name>JDCPU16BR</name>
@@ -20,6 +20,11 @@
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0.2</version>
         </dependency>
     </dependencies>
 
