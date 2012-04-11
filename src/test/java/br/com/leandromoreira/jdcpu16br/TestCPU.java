@@ -353,7 +353,9 @@ public class TestCPU {
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x001A);
         
-        for (int steps = 0; steps < 55; steps++) {
+        final int enoughStepsToRunAllCode = 55;
+        
+        for (int steps = 0; steps < enoughStepsToRunAllCode; steps++) {
             cpu.step();
         }
         assertThat(cpu.register(X), is(0x40));
