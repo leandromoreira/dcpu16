@@ -18,9 +18,11 @@ public class Main extends javax.swing.JFrame {
     private final CPU cpu;
     private final Memory memory;
     final HexaFormatter formatter = new HexaFormatter();
+    private final ROMLoader romLoader;
     private int sumCycle;
 
     public Main() {
+        romLoader = new ROMLoader();
         initComponents();
         cpu = new CPU();
         memory = cpu.memory();
@@ -488,12 +490,12 @@ public class Main extends javax.swing.JFrame {
 
     private void jBtnLoadROMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadROMActionPerformed
         final JFileChooser fileChooser = new JFileChooser();
-        int returnVal = fileChooser.showOpenDialog(this);
+        final int userAction = fileChooser.showOpenDialog(this);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            final File file = fileChooser.getSelectedFile();
+        if (userAction == JFileChooser.APPROVE_OPTION) {
+            final File rom = fileChooser.getSelectedFile();
             cpu.reset();
-            new ROMLoader().load(file).to(memory);
+            romLoader.load(rom).to(memory);
             updateMemory();
             updateRegisters();
             updateMemoryWatchers();
