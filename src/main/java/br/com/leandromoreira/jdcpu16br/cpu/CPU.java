@@ -1,4 +1,7 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.cpu;
+
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
+import br.com.leandromoreira.jdcpu16br.io.Memory;
 
 public class CPU {
 
@@ -10,7 +13,7 @@ public class CPU {
     public static final int Z = 0x5;
     public static final int I = 0x6;
     public static final int J = 0x7;
-    private final HexaFormatter formatter;
+    private final HexadecimalUtil formatter;
     private int[] register;
     private int programCounter, stackPointer;
     private int overflow;
@@ -23,7 +26,7 @@ public class CPU {
     private int currentCycleCost;
 
     public CPU() {
-        formatter = new HexaFormatter();
+        formatter = new HexadecimalUtil();
         memory = new Memory();
         instructions = new InstructionTable().instructionSet(this);
         decoders = new AllParametersDecoder(this).all();

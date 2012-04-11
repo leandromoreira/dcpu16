@@ -1,4 +1,4 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.cpu;
 
 public abstract class DefaultInstruction implements Instruction {
     public static final int DEFAULT_SIZE_INSTRUCTION = 1;

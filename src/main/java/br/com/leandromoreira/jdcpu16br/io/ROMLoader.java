@@ -1,6 +1,5 @@
 package br.com.leandromoreira.jdcpu16br.io;
 
-import br.com.leandromoreira.jdcpu16br.Memory;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import java.io.File;

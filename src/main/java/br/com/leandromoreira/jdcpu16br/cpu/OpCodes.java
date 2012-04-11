@@ -1,4 +1,4 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.cpu;
 
 import java.lang.reflect.Field;
 import java.util.logging.Level;

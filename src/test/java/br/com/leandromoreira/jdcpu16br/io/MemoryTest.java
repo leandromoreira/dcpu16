@@ -1,5 +1,6 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.io;
 
+import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;

@@ -1,8 +1,8 @@
 package br.com.leandromoreira.jdcpu16br.gui;
 
-import br.com.leandromoreira.jdcpu16br.CPU;
-import br.com.leandromoreira.jdcpu16br.HexaFormatter;
-import br.com.leandromoreira.jdcpu16br.Memory;
+import br.com.leandromoreira.jdcpu16br.cpu.CPU;
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
+import br.com.leandromoreira.jdcpu16br.io.Memory;
 import br.com.leandromoreira.jdcpu16br.io.ROMLoader;
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Main extends javax.swing.JFrame {
     private static final String ONE_SPACE = " ";
     private final CPU cpu;
     private final Memory memory;
-    final HexaFormatter formatter = new HexaFormatter();
+    final HexadecimalUtil formatter = new HexadecimalUtil();
     private final ROMLoader romLoader;
     private int sumCycle;
 
@@ -608,18 +608,18 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void updateMemoryWatcher(final JTextField text, final JLabel label) {
-        String textWatcher1 = text.getText().toLowerCase().replace("x", EMPTY_STRING);
-        if (!formatter.isValidHexadecimal(textWatcher1)) {
-            textWatcher1 = "0";
+        String textWatcher = text.getText().toLowerCase().replace("x", EMPTY_STRING);
+        if (!formatter.isValidHexadecimal(textWatcher)) {
+            textWatcher = "0";
         }
-        final Integer watcher1 = Integer.valueOf(textWatcher1, 16);
-        updateRegiter(text, watcher1);
-        label.setText(formatter.toHexa4Spaces(memory.readFrom(watcher1)));
+        final Integer watcherValue = Integer.valueOf(textWatcher, 16);
+        updateRegiter(text, watcherValue);
+        label.setText(formatter.toHexa4Spaces(memory.readFrom(watcherValue)));
     }
 
-    private String[] extractValidHexaDecimals(String[] rawHexadecimal) {
+    private String[] extractValidHexaDecimals(final String[] rawHexadecimal) {
         final List<String> listOfValidHexa = new ArrayList<>();
-        for (String hexa : rawHexadecimal) {
+        for (final String hexa : rawHexadecimal) {
             if (formatter.isValidHexadecimal(hexa)) {
                 listOfValidHexa.add(hexa);
             }

@@ -1,4 +1,4 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.io;
 
 public class Memory {
 

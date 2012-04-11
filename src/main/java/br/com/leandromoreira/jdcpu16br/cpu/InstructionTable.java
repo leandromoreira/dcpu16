@@ -1,14 +1,15 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.cpu;
 
-import static br.com.leandromoreira.jdcpu16br.OpCodes.*;
-import static br.com.leandromoreira.jdcpu16br.DefaultInstruction.DEFAULT_SIZE_INSTRUCTION;
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
+import static br.com.leandromoreira.jdcpu16br.cpu.OpCodes.*;
+import static br.com.leandromoreira.jdcpu16br.cpu.DefaultInstruction.DEFAULT_SIZE_INSTRUCTION;
 
 
 public class InstructionTable {
 
     private static final int NUMBER_OF_INSTRUCTIONS = 0x10;
     private static final int ZERO = 0;
-    private static final HexaFormatter formatter = new HexaFormatter();
+    private static final HexadecimalUtil formatter = new HexadecimalUtil();
 
     public Instruction[] instructionSet(final CPU cpu) {
         final Instruction[] instruction = new Instruction[NUMBER_OF_INSTRUCTIONS];

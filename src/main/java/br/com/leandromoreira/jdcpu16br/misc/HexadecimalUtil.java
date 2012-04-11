@@ -1,6 +1,6 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.misc;
 
-public class HexaFormatter {
+public class HexadecimalUtil {
 
     public static final String INFIX = "0";
     public static final String PREFIX = "0x";

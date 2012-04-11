@@ -1,4 +1,6 @@
-package br.com.leandromoreira.jdcpu16br;
+package br.com.leandromoreira.jdcpu16br.cpu;
+
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
 
 public class AllParametersDecoder {
 
@@ -12,7 +14,7 @@ public class AllParametersDecoder {
     private static final int NEXT_WORD_INDIRECT = 0x1E;
     private static final int NEXT_WORD = 0x1F;
     private final CPU cpu;
-    private final HexaFormatter formatter = new HexaFormatter();
+    private final HexadecimalUtil formatter = new HexadecimalUtil();
     private final String[] literalRegisterFor = new String[]{"A", "B", "C", "X", "Y", "Z", "I", "J"};
 
     public AllParametersDecoder(final CPU cpu) {
