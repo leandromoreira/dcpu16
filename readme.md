@@ -6,7 +6,7 @@ You can read my view of specs on [documentation](https://github.com/leandromorei
 
 ### Debugger
 
-![JDCPU16BR Debugger](http://i41.tinypic.com/r1wpoz.png)
+![JDCPU16BR 0.6 Debugger Screenshot](http://i43.tinypic.com/r1wrvt.png)
 
 ## Resources
 
