@@ -337,9 +337,25 @@ public class TestCPU {
 
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x000D);
-        for (int steps = 0; steps < 15; steps++) {
+        
+        memory.writeAt(address++, 0x9031);
+        
+        memory.writeAt(address++, 0x7C10);
+        memory.writeAt(address++, 0x0018);
+        
+        memory.writeAt(address++, 0x7DC1);
+        memory.writeAt(address++, 0x001A);
+        
+        memory.writeAt(address++, 0x9037);
+        
+        memory.writeAt(address++, 0x61C1);
+        
+        memory.writeAt(address++, 0x7DC1);
+        memory.writeAt(address++, 0x001A);
+        
+        for (int steps = 0; steps < 55; steps++) {
             cpu.step();
         }
-        //todo: asserts ;s
+        assertThat(cpu.register(X), is(0x40));
     }
 }
