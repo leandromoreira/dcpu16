@@ -15,12 +15,12 @@ public class TestOpCodes {
         assertThat(OpCodes.toString(0x0F), is("IFB"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void it_throws_illegal_argument_for_higher_values() {
         assertThat(OpCodes.toString(0x1F), is("NO WAY"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void it_throws_illegal_argument_for_negative_values() {
         assertThat(OpCodes.toString(-0x01), is("ARE YOU KIDDING?"));
     }
@@ -30,12 +30,12 @@ public class TestOpCodes {
         assertThat(OpCodes.syscallToString(0x01), is("SYSCALL_JSR"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void it_throws_illegal_argument_for_syscall_higher_values() {
         assertThat(OpCodes.syscallToString(0x1F), is("NO WAY"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void it_throws_illegal_argument_for_syscall_negative_values() {
         assertThat(OpCodes.syscallToString(-0x01), is("ARE YOU KIDDING?"));
     }

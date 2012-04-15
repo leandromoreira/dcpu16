@@ -1,7 +1,7 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
-import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static br.com.leandromoreira.jdcpu16br.cpu.CPU.*;
+import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -86,7 +86,7 @@ public class TestAddressModeCPU {
         memory.writeAt(0x0000, 0b011110_000000_0001);
         memory.writeAt(0x0001, 0x0030);
         memory.writeAt(0x0030, 0x0015);
-        System.out.println(cpu.step());
+        cpu.step();
         assertThat(cpu.register(A), is(0x0015));
     }
 

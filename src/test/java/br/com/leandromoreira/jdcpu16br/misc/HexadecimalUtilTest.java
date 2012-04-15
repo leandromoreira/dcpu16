@@ -1,11 +1,10 @@
 package br.com.leandromoreira.jdcpu16br.misc;
 
-import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
-public class HexaFormatterTest {
+public class HexadecimalUtilTest {
 
     @Test
     public void it_format_as_a_hexa_four_position_given_a_number() {

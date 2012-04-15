@@ -1,8 +1,8 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
-import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
-import static br.com.leandromoreira.jdcpu16br.cpu.OpCodes.*;
 import static br.com.leandromoreira.jdcpu16br.cpu.DefaultInstruction.DEFAULT_SIZE_INSTRUCTION;
+import static br.com.leandromoreira.jdcpu16br.cpu.OpCodes.*;
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
 
 
 public class InstructionTable {
