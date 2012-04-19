@@ -11,7 +11,7 @@ public class Memory {
     }
 
     public void writeAt(final int address, final int value) {
-        memory[address] = value;
+        memory[address] = value & 0xFFFF;
     }
 
     public void clear() {
