@@ -1,6 +1,5 @@
 package br.com.leandromoreira.jdcpu16br.io;
 
-import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -19,6 +18,12 @@ public class MemoryTest {
     public void it_handles_io() {
         memory.writeAt(0x0000, 0x7C01);
         assertThat(memory.readFrom(0x0000), is(0x7C01));
+    }
+    
+    @Test
+    public void it_handles_only_16bits_cell_size() {
+        memory.writeAt(0x0000, 0x10000);
+        assertThat(memory.readFrom(0x0000), is(0x0000));
     }
 
     @Test
