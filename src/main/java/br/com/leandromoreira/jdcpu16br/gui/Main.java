@@ -496,6 +496,7 @@ public class Main extends javax.swing.JFrame {
             final File rom = fileChooser.getSelectedFile();
             cpu.reset();
             romLoader.load(rom).to(memory);
+            jTxtOutup.setText(EMPTY_STRING);
             updateMemory();
             updateRegisters();
             updateMemoryWatchers();
