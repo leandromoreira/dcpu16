@@ -77,6 +77,8 @@ public class AddressModeDecoders {
                 return cpu.getStackPointer();
             }
         };
+        
+        //TODO: this decoder can't sum when setted! I guess
         decoder[PC_DECODER] = new AddressModeDecoder(PC_DECODER) {
 
             @Override
