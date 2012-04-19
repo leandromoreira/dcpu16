@@ -23,13 +23,13 @@ public class AddressModeDecoders {
         this.cpu = cpu;
     }
 
-    public ParameterDecoder[] all() {
-        final ParameterDecoder[] decoder = new ParameterDecoder[NUMBER_OF_DECODERS];
+    public AddressModeDecoder[] all() {
+        final AddressModeDecoder[] decoder = new AddressModeDecoder[NUMBER_OF_DECODERS];
         fillDecoderDirectRegister(decoder);
         fillDecoderIndirectRegister(decoder);
         fillDecoderIndirectNextWordPlusRegister(decoder);
         fillDecoderLiteral(decoder);
-        decoder[POP] = new ParameterDecoder(POP) {
+        decoder[POP] = new AddressModeDecoder(POP) {
 
             @Override
             public void write(final int value) {
@@ -41,7 +41,7 @@ public class AddressModeDecoders {
                 return cpu.memory().readFrom(cpu.popStackPointer());
             }
         };
-        decoder[PEEK] = new ParameterDecoder(PEEK) {
+        decoder[PEEK] = new AddressModeDecoder(PEEK) {
 
             @Override
             public void write(final int value) {
@@ -53,7 +53,7 @@ public class AddressModeDecoders {
                 return cpu.memory().readFrom(cpu.getStackPointer());
             }
         };
-        decoder[PUSH] = new ParameterDecoder(PUSH) {
+        decoder[PUSH] = new AddressModeDecoder(PUSH) {
 
             @Override
             public void write(final int value) {
@@ -65,7 +65,7 @@ public class AddressModeDecoders {
                 return cpu.memory().readFrom(cpu.pushStackPointer());
             }
         };
-        decoder[SP_DECODER] = new ParameterDecoder(SP_DECODER) {
+        decoder[SP_DECODER] = new AddressModeDecoder(SP_DECODER) {
 
             @Override
             public void write(final int value) {
@@ -77,7 +77,7 @@ public class AddressModeDecoders {
                 return cpu.getStackPointer();
             }
         };
-        decoder[PC_DECODER] = new ParameterDecoder(PC_DECODER) {
+        decoder[PC_DECODER] = new AddressModeDecoder(PC_DECODER) {
 
             @Override
             public void write(final int value) {
@@ -89,7 +89,7 @@ public class AddressModeDecoders {
                 return cpu.getProgramCounter();
             }
         };
-        decoder[O_DECODER] = new ParameterDecoder(O_DECODER) {
+        decoder[O_DECODER] = new AddressModeDecoder(O_DECODER) {
 
             @Override
             public void write(final int value) {
@@ -101,7 +101,7 @@ public class AddressModeDecoders {
                 return cpu.getOverflow();
             }
         };
-        decoder[NEXT_WORD_INDIRECT] = new ParameterDecoder(NEXT_WORD_INDIRECT) {
+        decoder[NEXT_WORD_INDIRECT] = new AddressModeDecoder(NEXT_WORD_INDIRECT) {
 
             @Override
             public void write(final int value) {
@@ -125,7 +125,7 @@ public class AddressModeDecoders {
                 return 1;
             }
         };
-        decoder[NEXT_WORD] = new ParameterDecoder(NEXT_WORD) {
+        decoder[NEXT_WORD] = new AddressModeDecoder(NEXT_WORD) {
 
             @Override
             public void write(final int value) {
@@ -145,9 +145,9 @@ public class AddressModeDecoders {
         return decoder;
     }
 
-    private void fillDecoderDirectRegister(final ParameterDecoder[] decoder) {
+    private void fillDecoderDirectRegister(final AddressModeDecoder[] decoder) {
         for (int registerIndex = 0x00; registerIndex <= 0x07; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+            decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
                 @Override
                 public void write(final int value) {
@@ -164,9 +164,9 @@ public class AddressModeDecoders {
         }
     }
 
-    private void fillDecoderIndirectRegister(final ParameterDecoder[] decoder) {
+    private void fillDecoderIndirectRegister(final AddressModeDecoder[] decoder) {
         for (int registerIndex = 0x08; registerIndex <= 0x0F; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+            decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
                 @Override
                 public void write(int value) {
@@ -183,9 +183,9 @@ public class AddressModeDecoders {
         }
     }
 
-    private void fillDecoderLiteral(final ParameterDecoder[] decoder) {
+    private void fillDecoderLiteral(final AddressModeDecoder[] decoder) {
         for (int registerIndex = 0x20; registerIndex <= 0x3F; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+            decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
                 @Override
                 public void write(int value) {
@@ -200,9 +200,9 @@ public class AddressModeDecoders {
         }
     }
 
-    private void fillDecoderIndirectNextWordPlusRegister(final ParameterDecoder[] decoder) {
+    private void fillDecoderIndirectNextWordPlusRegister(final AddressModeDecoder[] decoder) {
         for (int registerIndex = 0x10; registerIndex <= 0x17; registerIndex++) {
-            decoder[registerIndex] = new ParameterDecoder(registerIndex) {
+            decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
                 @Override
                 public void write(int value) {

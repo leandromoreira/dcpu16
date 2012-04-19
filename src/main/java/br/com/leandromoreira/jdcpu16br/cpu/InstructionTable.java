@@ -25,7 +25,7 @@ public class InstructionTable {
             public void execute() {
                 final int syscallOpCode = cpu.getCurrentWord().a();
                 final int a = cpu.getCurrentWord().b();
-                final ParameterDecoder aDecoded = cpu.decoderFor(a);
+                final AddressModeDecoder aDecoded = cpu.decoderFor(a);
                 final Syscall newInstruction = syscalls()[syscallOpCode];
 
                 assembler = (newInstruction != null) ? newInstruction.execute(aDecoded.read()) : "RESERVED " + formatter.toHexadecimal(aDecoded.read());
@@ -273,8 +273,8 @@ public class InstructionTable {
 
     public int nextInstructionSize(final CPU cpu,final int newProgramCounter) {
         final Word currentWord = new Word(cpu.memory().readFrom(newProgramCounter));
-        final ParameterDecoder a = cpu.decoderFor(currentWord.a());
-        final ParameterDecoder b = cpu.decoderFor(currentWord.b());
+        final AddressModeDecoder a = cpu.decoderFor(currentWord.a());
+        final AddressModeDecoder b = cpu.decoderFor(currentWord.b());
         final Instruction instruction = cpu.getInstructions()[currentWord.code()];
         return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
     }

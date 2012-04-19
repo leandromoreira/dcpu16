@@ -1,7 +1,8 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
-import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
+import static br.com.leandromoreira.jdcpu16br.cpu.OpCodes.NOT_BASIC;
 import br.com.leandromoreira.jdcpu16br.io.Memory;
+import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
 
 public class CPU {
 
@@ -18,9 +19,9 @@ public class CPU {
     private int programCounter, stackPointer;
     private int overflow;
     private final Instruction[] instructions;
-    private final ParameterDecoder[] decoders;
+    private final AddressModeDecoder[] decoders;
     private final Memory memory;
-    private ParameterDecoder a, b;
+    private AddressModeDecoder a, b;
     private Word currentWord;
     private Instruction currentInstruction;
     private int currentCycleCost;
@@ -48,11 +49,11 @@ public class CPU {
         return currentWord;
     }
 
-    public ParameterDecoder parameterA() {
+    public AddressModeDecoder parameterA() {
         return a;
     }
 
-    public ParameterDecoder parameterB() {
+    public AddressModeDecoder parameterB() {
         return b;
     }
 
@@ -126,7 +127,7 @@ public class CPU {
 
     private String assemblerFor(final int currentProgramCounter) {
         currentCycleCost = currentInstruction.cycles() + a.extraCycles() + b.extraCycles();
-        if (currentWord.code() != OpCodes.NOT_BASIC) {
+        if (currentWord.code() != NOT_BASIC) {
             return String.format("%s: %s %s, %s", formatter.toHexa4Spaces(currentProgramCounter), currentWord, a, b);
         } else {
             return String.format("%s: %s", formatter.toHexa4Spaces(currentProgramCounter), currentInstruction);
@@ -137,7 +138,7 @@ public class CPU {
         return (instruction.sumToPC() != 0) ? instruction.sumToPC() + a.size() + b.size() : 0;
     }
 
-    public ParameterDecoder decoderFor(final int value) {
+    public AddressModeDecoder decoderFor(final int value) {
         return decoders[value];
     }
 }

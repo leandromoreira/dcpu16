@@ -1,6 +1,6 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
-public abstract class ParameterDecoder {
+public abstract class AddressModeDecoder {
 
     protected final int index;
     protected String representation;
@@ -18,7 +18,7 @@ public abstract class ParameterDecoder {
     }
     
 
-    public ParameterDecoder(final int index) {
+    public AddressModeDecoder(final int index) {
         this.representation = defaultMapping[index];
         this.index = index;
     }
@@ -27,7 +27,7 @@ public abstract class ParameterDecoder {
         return myProgramCounter;
     }
 
-    public void setMyProgramCounter(int myProgramCounter) {
+    public void setMyProgramCounter(final int myProgramCounter) {
         this.myProgramCounter = myProgramCounter;
     }
 
