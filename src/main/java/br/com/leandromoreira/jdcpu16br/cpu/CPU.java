@@ -29,7 +29,7 @@ public class CPU {
         formatter = new HexadecimalUtil();
         memory = new Memory();
         instructions = new InstructionTable().instructionSet(this);
-        decoders = new AllParametersDecoder(this).all();
+        decoders = new AddressModeDecoders(this).all();
         reset();
     }
 

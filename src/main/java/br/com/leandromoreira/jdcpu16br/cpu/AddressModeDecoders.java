@@ -1,8 +1,9 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
 import br.com.leandromoreira.jdcpu16br.misc.HexadecimalUtil;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AllParametersDecoder {
+public class AddressModeDecoders {
 
     private static final int NUMBER_OF_DECODERS = 0x40;
     private static final int POP = 0x18;
@@ -17,7 +18,8 @@ public class AllParametersDecoder {
     private final HexadecimalUtil formatter = new HexadecimalUtil();
     private final String[] literalRegisterFor = new String[]{"A", "B", "C", "X", "Y", "Z", "I", "J"};
 
-    public AllParametersDecoder(final CPU cpu) {
+    public AddressModeDecoders(final CPU cpu) {
+        checkNotNull(cpu);
         this.cpu = cpu;
     }
 
@@ -103,13 +105,13 @@ public class AllParametersDecoder {
 
             @Override
             public void write(final int value) {
-                representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
+                representation = indirectFormat(formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)));
                 cpu.memory().writeAt(cpu.memory().readFrom(getMyProgramCounter() + 1), value);
             }
 
             @Override
             public int read() {
-                representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)) + "]";
+                representation = indirectFormat(formatter.toHexadecimal(cpu.memory().readFrom(getMyProgramCounter() + 1)));
                 return cpu.memory().readFrom(cpu.memory().readFrom(getMyProgramCounter() + 1));
             }
 
@@ -168,13 +170,13 @@ public class AllParametersDecoder {
 
                 @Override
                 public void write(int value) {
-                    representation = "[" + literalRegisterFor[index - 0x8] + "]";
+                    representation = indirectFormat(literalRegisterFor[index - 0x8]);
                     cpu.memory().writeAt(cpu.register(index - 0x8), value);
                 }
 
                 @Override
                 public int read() {
-                    representation = "[" + literalRegisterFor[index - 0x8] + "]";
+                    representation = indirectFormat(literalRegisterFor[index - 0x8]);
                     return cpu.memory().readFrom(cpu.register(index - 0x8));
                 }
             };
@@ -215,7 +217,7 @@ public class AllParametersDecoder {
                 private int nextWordPlusRegister() {
                     final int nextWord = getMyProgramCounter() + 1;
                     final int correctIndex = index - 0x10;
-                    representation = "[" + formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + literalRegisterFor[correctIndex] + "]";
+                    representation = indirectFormat(formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + literalRegisterFor[correctIndex]);
                     return cpu.memory().readFrom(nextWord) + cpu.register(correctIndex);
                 }
 
@@ -230,5 +232,9 @@ public class AllParametersDecoder {
                 }
             };
         }
+    }
+    
+    private String indirectFormat(final Object value){
+        return "[" + value + "]";
     }
 }

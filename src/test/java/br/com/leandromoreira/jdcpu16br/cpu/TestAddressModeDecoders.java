@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestAddressModeCPU {
+public class TestAddressModeDecoders {
 
     private final CPU cpu = new CPU();
     private final Memory memory = cpu.memory();
