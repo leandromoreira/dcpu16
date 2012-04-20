@@ -38,7 +38,9 @@ public class AddressModeDecoders {
 
             @Override
             public int read() {
-                return cpu.memory().readFrom(cpu.popStackPointer());
+                final int realValue = cpu.getStackPointer();
+                cpu.popStackPointer();
+                return realValue;
             }
         };
         decoder[PEEK] = new AddressModeDecoder(PEEK) {
@@ -78,12 +80,12 @@ public class AddressModeDecoders {
             }
         };
         
-        //TODO: this decoder can't sum when setted! I guess
         decoder[PC_DECODER] = new AddressModeDecoder(PC_DECODER) {
 
             @Override
             public void write(final int value) {
                 cpu.setProgramCounter(value);
+                throw new SkipSumPCException();
             }
 
             @Override

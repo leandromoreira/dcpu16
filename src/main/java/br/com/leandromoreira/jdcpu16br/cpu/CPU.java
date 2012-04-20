@@ -112,8 +112,13 @@ public class CPU {
 
         decodeParameters();
 
-        currentInstruction.execute();
-        programCounter += sumToPC(currentInstruction);
+        try {
+            currentInstruction.execute();
+            programCounter += sumToPC(currentInstruction);
+        } catch (SkipSumPCException e) {
+            //maybe another logic to it!
+        }
+        
 
         return assemblerFor(currentProgramCounter);
     }

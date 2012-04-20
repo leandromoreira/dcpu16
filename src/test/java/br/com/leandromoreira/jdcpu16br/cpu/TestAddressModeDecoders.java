@@ -47,15 +47,6 @@ public class TestAddressModeDecoders {
     }
 
     @Test
-    public void it_performs_push_and_pop() {
-        memory.writeAt(0x0000, 0b100010_011010_0001);
-        memory.writeAt(0x0001, 0b011000_000011_0001);
-        cpu.step();
-        cpu.step();
-        assertThat(cpu.register(X), is(0x02));
-    }
-
-    @Test
     public void it_performs_peek() {
         memory.writeAt(0xFFFF, 0xCAFE);
         memory.writeAt(0x0000, 0b011001_000000_0001);

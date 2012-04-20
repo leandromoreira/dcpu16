@@ -37,7 +37,7 @@ public class InstructionTable {
 
                         @Override
                         public String execute(final int a) {
-                            cpu.setStackPointer(cpu.getProgramCounter() + 1);
+                            cpu.setStackPointer(cpu.getProgramCounter() + 2);
                             cpu.setProgramCounter(a);
                             defaultSumToNextInstruction = ZERO;
                             return "JSR " + formatter.toHexadecimal(a);
