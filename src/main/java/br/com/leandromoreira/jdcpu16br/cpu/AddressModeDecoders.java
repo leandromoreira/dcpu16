@@ -33,7 +33,8 @@ public class AddressModeDecoders {
 
             @Override
             public void write(final int value) {
-                cpu.memory().writeAt(cpu.popStackPointer(), value);
+                cpu.memory().writeAt(cpu.getStackPointer(), value);
+                cpu.popStackPointer();
             }
 
             @Override
@@ -59,12 +60,15 @@ public class AddressModeDecoders {
 
             @Override
             public void write(final int value) {
-                cpu.memory().writeAt(cpu.pushStackPointer(), value);
+                cpu.memory().writeAt(cpu.getStackPointer(), value);
+                cpu.pushStackPointer();
             }
 
             @Override
             public int read() {
-                return cpu.memory().readFrom(cpu.pushStackPointer());
+                final int value = cpu.memory().readFrom(cpu.getStackPointer());
+                cpu.pushStackPointer();
+                return value;
             }
         };
         decoder[SP_DECODER] = new AddressModeDecoder(SP_DECODER) {
@@ -79,7 +83,7 @@ public class AddressModeDecoders {
                 return cpu.getStackPointer();
             }
         };
-        
+
         decoder[PC_DECODER] = new AddressModeDecoder(PC_DECODER) {
 
             @Override
@@ -237,8 +241,8 @@ public class AddressModeDecoders {
             };
         }
     }
-    
-    private String indirectFormat(final Object value){
+
+    private String indirectFormat(final Object value) {
         return "[" + value + "]";
     }
 }
