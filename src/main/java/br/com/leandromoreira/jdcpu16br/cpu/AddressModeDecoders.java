@@ -33,15 +33,12 @@ public class AddressModeDecoders {
 
             @Override
             public void write(final int value) {
-                cpu.memory().writeAt(cpu.getStackPointer(), value);
-                cpu.popStackPointer();
+                throw new IllegalStateException("Read-only: you shouldn't write to POP operation.");
             }
 
             @Override
             public int read() {
-                final int realValue = cpu.getStackPointer();
-                cpu.popStackPointer();
-                return realValue;
+                return cpu.memory().readFrom(cpu.popStackPointer());
             }
         };
         decoder[PEEK] = new AddressModeDecoder(PEEK) {
@@ -60,15 +57,13 @@ public class AddressModeDecoders {
 
             @Override
             public void write(final int value) {
-                cpu.memory().writeAt(cpu.getStackPointer(), value);
                 cpu.pushStackPointer();
+                cpu.memory().writeAt(cpu.getStackPointer(), value);
             }
 
             @Override
             public int read() {
-                final int value = cpu.memory().readFrom(cpu.getStackPointer());
-                cpu.pushStackPointer();
-                return value;
+                throw new IllegalStateException("Write-only: you shouldn't read to PUSH operation.");
             }
         };
         decoder[SP_DECODER] = new AddressModeDecoder(SP_DECODER) {

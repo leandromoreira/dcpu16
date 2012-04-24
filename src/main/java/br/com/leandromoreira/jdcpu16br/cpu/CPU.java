@@ -35,8 +35,7 @@ public class CPU {
     }
 
     public final void reset() {
-        stackPointer = 0xFFFF;
-        programCounter = overflow = 0x0000;
+        stackPointer = programCounter = overflow = 0x0000;
         register = new int[0x8];
         memory.clear();
     }
@@ -82,11 +81,20 @@ public class CPU {
     }
 
     public int popStackPointer() {
-        return stackPointer++;
+        if (stackPointer != 0) {
+            return stackPointer++;
+        } else {
+            stackPointer = 0xFFFF;
+            return stackPointer;
+        }
     }
 
     public int pushStackPointer() {
-        return --stackPointer;
+        if (stackPointer == 0x0000) {
+            stackPointer = 0xFFFF;
+            return stackPointer;
+        }
+        return stackPointer-- & 0xFFFF;
     }
 
     public void setStackPointer(final int stackPointer) {
@@ -118,7 +126,7 @@ public class CPU {
         } catch (SkipSumPCException e) {
             //maybe another logic to it!
         }
-        
+
 
         return assemblerFor(currentProgramCounter);
     }

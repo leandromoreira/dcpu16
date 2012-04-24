@@ -1,7 +1,7 @@
 package br.com.leandromoreira.jdcpu16br.cpu;
 
-import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static br.com.leandromoreira.jdcpu16br.cpu.CPU.*;
+import br.com.leandromoreira.jdcpu16br.io.Memory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -18,16 +18,34 @@ public class TestCPU {
     }
 
     @Test
-    public void it_returns_stack_and_increment_itself() {
-        cpu.setStackPointer(0x0002);
-        assertThat(cpu.popStackPointer(), is(0x0002));
-        assertThat(cpu.getStackPointer(), is(0x0003));
+    public void it_clockwise_the_first_pop() {
+        cpu.popStackPointer();
+        assertThat(cpu.getStackPointer(), is(0xFFFF));
     }
 
+    //Thanks for http://0x10cforum.com/profile/2173677
+    //the example can be viewed at http://0x10cforum.com/forum/m/4932880/viewthread/2864181-how-does-stack-work
     @Test
-    public void it_returns_drecremented_stack_pointer() {
-        cpu.setStackPointer(0x0002);
-        assertThat(cpu.pushStackPointer(), is(0x0001));
+    public void it_test_push_and_pop() {
+        final int[] binaries = new int[]{0x6401, 0x85A1, 0x6401,
+            0x89A1, 0x8DA1, 0x91A1,
+            0x95A1, 0x6001, 0x6011,
+            0x6021, 0x6031, 0x6041};
+        int address = 0x0000;
+        for (int code : binaries) {
+            cpu.memory().writeAt(address++, code);
+        }
+
+        final int enoughStepsFor = 12;
+        for (int step = 0; step < enoughStepsFor; step++) {
+            cpu.step();
+        }
+        int expectedValue = 0x5;
+        assertThat(cpu.register(A), is(expectedValue--));
+        assertThat(cpu.register(B), is(expectedValue--));
+        assertThat(cpu.register(C), is(expectedValue--));
+        assertThat(cpu.register(X), is(expectedValue--));
+        assertThat(cpu.register(Y), is(expectedValue--));
     }
 
     @Test
@@ -338,24 +356,24 @@ public class TestCPU {
 
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x000D);
-        
+
         memory.writeAt(address++, 0x9031);
-        
+
         memory.writeAt(address++, 0x7C10);
         memory.writeAt(address++, 0x0018);
-        
+
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x001A);
-        
+
         memory.writeAt(address++, 0x9037);
-        
+
         memory.writeAt(address++, 0x61C1);
-        
+
         memory.writeAt(address++, 0x7DC1);
         memory.writeAt(address++, 0x001A);
-        
+
         final int enoughStepsToRunAllCode = 55;
-        
+
         for (int steps = 0; steps < enoughStepsToRunAllCode; steps++) {
             cpu.step();
         }

@@ -50,6 +50,7 @@ public class TestAddressModeDecoders {
     public void it_performs_peek() {
         memory.writeAt(0xFFFF, 0xCAFE);
         memory.writeAt(0x0000, 0b011001_000000_0001);
+        cpu.popStackPointer();
         cpu.step();
         assertThat(cpu.register(A), is(0xCAFE));
     }

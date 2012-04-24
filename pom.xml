@@ -5,7 +5,7 @@
 
     <groupId>br.com.leandromoreira</groupId>
     <artifactId>jdcpu16br</artifactId>
-    <version>0.6</version>
+    <version>0.9</version>
     <packaging>jar</packaging>
 
     <name>JDCPU16BR</name>
