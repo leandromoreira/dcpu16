@@ -1,3 +1,4 @@
+[![Build Status](https://secure.travis-ci.org/leandromoreira/dcpu16.png?branch=master)](http://travis-ci.org/leandromoreira/dcpu16)
 # JDCPU16BR - Yet another DCPU16 VM/Debugger Java implementation
 
 You can read my view of specs on [documentation](https://github.com/leandromoreira/dcpu16/wiki/Documentation).
