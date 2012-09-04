@@ -16,3 +16,9 @@ dependencies {
   compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
   testCompile 'junit:junit:4.8.1'
 }
+
+test {
+    afterTest { desc, result -> 
+        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
