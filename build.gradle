@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Main-Class': 'br.com.leandromoreira.jdcpu16br.gui.Main'
+    }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
+  testCompile 'junit:junit:4.8.1'
+}
