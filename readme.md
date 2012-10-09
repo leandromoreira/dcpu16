@@ -1,5 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/leandromoreira/dcpu16.png?branch=master)](http://travis-ci.org/leandromoreira/dcpu16)
-
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/leandromoreira/dcpu16)
 
 # JDCPU16BR - Yet another DCPU16 VM/Debugger Java implementation
 
