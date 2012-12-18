@@ -16,7 +16,7 @@ public class CPU {
     public static final int J = 0x7;
     private final HexadecimalUtil formatter;
     private int[] register;
-    private int programCounter, stackPointer;
+    private int programCounter, stackPointer, extraExcess, interruptAddress;
     private int overflow;
     private final Instruction[] instructions;
     private final AddressModeDecoder[] decoders;
