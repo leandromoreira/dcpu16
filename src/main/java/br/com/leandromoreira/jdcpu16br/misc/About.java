@@ -1,9 +1,8 @@
 package br.com.leandromoreira.jdcpu16br.misc;
 
 public class About {
-
     public static final String VM_NAME = "DCPU-16";
-    public static final String VM_VERSION = "1.1";
-    public static final String VM_SPEC = "http://0x10c.com/doc/dcpu-16.txt";
-    public static final String COPYRIGHT = "2012 Mojang";
+    public static final String VM_VERSION = "1.7";
+    public static final String VM_SPEC = "http://dcpu.com/dcpu-16/";
+    public static final String COPYRIGHT = "1985 Mojang";
 }
