@@ -12,7 +12,7 @@ You can read my view of specs on [documentation](https://github.com/leandromorei
 
 ## Resources
 
-*[Original specs to dcpu-16 vitual machine](http://0x10c.com/doc/dcpu-16.txt)*
+*[Original specs to dcpu-16 vitual machine](http://dcpu.com/)*
 
 *[Quick explanation to grasp values section of spec](http://stackoverflow.com/questions/10028644/how-to-understand-the-first-line-of-the-dcpu-16-specs-assembly-example)*
 
