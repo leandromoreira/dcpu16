@@ -8,10 +8,16 @@ import org.junit.Test;
 public class MemoryTest {
 
     private Memory memory;
+    private final static int ANY_VALUE = 0xF;
 
     @Before
     public void setup() {
         memory = new Memory();
+    }
+
+    @Test(expected=ArrayIndexOutOfBoundsException.class)
+    public void it_allocates_only_10000_words() throws Exception {
+        memory.writeAt(0x10000,ANY_VALUE); 
     }
 
     @Test
