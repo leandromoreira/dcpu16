@@ -148,7 +148,7 @@ public class AddressModeDecoders {
         return decoder;
     }
 
-    private void fillDecoderDirectRegister(final AddressModeDecoder[] decoder) {
+        private void fillDecoderDirectRegister(final AddressModeDecoder[] decoder) {
         for (int registerIndex = 0x00; registerIndex <= 0x07; registerIndex++) {
             decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
@@ -191,7 +191,8 @@ public class AddressModeDecoders {
             decoder[registerIndex] = new AddressModeDecoder(registerIndex) {
 
                 @Override
-                public void write(int value) {
+                public void write(final int value) {
+                    //fails silently
                 }
 
                 @Override
@@ -218,10 +219,10 @@ public class AddressModeDecoders {
                 }
 
                 private int nextWordPlusRegister() {
-                    final int nextWord = getMyProgramCounter() + 1;
+                    final int nextWord = cpu.memory().readFrom(getMyProgramCounter() + 1);
                     final int correctIndex = index - 0x10;
-                    representation = indirectFormat(formatter.toHexadecimal(cpu.memory().readFrom(nextWord)) + " + " + literalRegisterFor[correctIndex]);
-                    return cpu.memory().readFrom(nextWord) + cpu.register(correctIndex);
+                    representation = indirectFormat(formatter.toHexadecimal(nextWord) + " + " + literalRegisterFor[correctIndex]);
+                    return cpu.register(correctIndex) + nextWord;
                 }
 
                 @Override
