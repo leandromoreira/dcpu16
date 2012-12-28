@@ -13,4 +13,13 @@ public class TestWord {
         assertThat(instruction.b(),is(0b10000));
         assertThat(instruction.code(),is(0b00001));
     }
+    
+    @Test
+    public void it_creates_instruction_based_on_its_operands(){
+        final int a = 0b111111;
+        final int b = 0b10000;
+        final int opCode = 0b00001;
+        final Word instruction = new Word(a,b,opCode);
+        assertThat(instruction.rawInstruction(), is(0b111111_10000_00001));
+    }
 }
